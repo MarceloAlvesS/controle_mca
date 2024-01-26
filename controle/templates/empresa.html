@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/terciario.css' %}">
+    <title>Controle "<usuario>" </title>
+</head>
+<body>
+    <header>
+        <a href="{% url 'empresas' pagina%}"><img src="{% static 'image/ir.png'%}" alt="voltar" id="voltar"></a>
+        <h1>{{empresa|title}}</h1>
+        <a href="{% url 'home' %}"><img src="{% static 'image/fechar.png'%}" alt="voltar"></a>
+    </header>
+    <table>
+        
+    </table>
+</body>
+</html>

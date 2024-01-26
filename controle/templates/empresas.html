@@ -11,21 +11,21 @@
 <body>
     <header id="secundario">
         <div id="titulo">
-            <h1>COMPETENCIAS</h1>
+            <h1>EMPRESAS</h1>
         </div>
         <a href="{% url 'home' %}" id="fechar"><img src="{% static 'image/fechar.png' %}" alt=""></a>
     </header>
     <div id="caminho">
-        {% for competencia in competencias %}
-        <a href="{% url 'competencia' competencia%}" class="caminho">{{competencia}}</a>
+        {% for empresa in empresas %}
+        <a href="{% url 'empresa' empresa%}" class="caminho">{{empresa}}</a>
         {% endfor %}
     </div>
     <footer>
         {% if anterior %}
-        <a href="{% url 'competencias' pagina|add:-1%}"><img src="{% static 'image/ir.png' %}" alt="anterior" id="anterior"></a>
+        <a href="{% url 'empresas' pagina|add:-1%}"><img src="{% static 'image/ir.png' %}" alt="anterior" id="anterior"></a>
         {% endif %}
         {% if sucessor %}
-        <a href="{% url 'competencias' pagina|add:+1%}"><img src="{% static 'image/ir.png' %}" alt="sucessor" id="sucessor"></a>
+        <a href="{% url 'empresas' pagina|add:+1%}"><img src="{% static 'image/ir.png' %}" alt="sucessor" id="sucessor"></a>
         {% endif %}
     </footer>
 </body>

@@ -6,18 +6,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
     <title>Controle "<usuario>" </title>
 </head>
 <body>
-    <header>
+    <header id="primario">
         <h1>CONTROLE</h1>
         <h2>2024</h2>
     </header>
     <div>
-        <a href="{% url 'empresas' %}">EMPRESAS</a>
-        <a href="{% url 'obrigacoes' %}">OBRIGAÇÕES</a>
-        <a href="{% url 'competencias' %}">COMPETÊNCIAS</a>
+        <a href="{% url 'empresas' 1 %}">EMPRESAS</a>
+        <a href="{% url 'obrigacoes' 1 %}">OBRIGAÇÕES</a>
+        <a href="{% url 'competencias' 1 %}">COMPETÊNCIAS</a>
     </div>
 
 </body>
