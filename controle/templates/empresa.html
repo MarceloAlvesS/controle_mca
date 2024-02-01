@@ -10,13 +10,63 @@
     <title>Controle "<usuario>" </title>
 </head>
 <body>
-    <header>
-        <a href="{% url 'empresas' pagina%}"><img src="{% static 'image/ir.png'%}" alt="voltar" id="voltar"></a>
-        <h1>{{empresa|title}}</h1>
-        <a href="{% url 'home' %}"><img src="{% static 'image/fechar.png'%}" alt="voltar"></a>
-    </header>
-    <table>
+    
+    <form method="post"> {% csrf_token %}
         
-    </table>
+        <header>
+            <a href="{% url 'empresas' 1%}" id="voltar"><img src="{% static 'image/ir.png'%}" alt="voltar"></a>
+            {{empresaForm.nome}}
+            <a href="{% url 'home' %}" id="fechar"><img src="{% static 'image/fechar.png'%}" alt="voltar"></a>
+        </header>
+        
+        <table id="mensal">
+            <thead>
+                <tr>
+                    <th>OBIGAÇÕES</th>
+                    <th>JAN</th>
+                    <th>FEV</th>
+                    <th>MAR</th>
+                    <th>ABR</th>
+                    <th>MAI</th>
+                    <th>JUN</th>
+                    <th>JUL</th>
+                    <th>AGO</th>
+                    <th>SET</th>
+                    <th>OUT</th>
+                    <th>NOV</th>
+                    <th>DEZ</th>
+                    <th>OBS</th>
+                </tr>
+            </thead>
+            <tbody id="competencias">
+                <tr id="linha">
+                    {% for form in competenciaForm %}
+                    <td>{{form}}</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+        <div>
+            <input type="button" id="adicionar" value="ADICIONAR">
+            <input type="submit" value="Salvar ">
+        </div>
+    </form>
+    <script>
+        const adicionar = document.getElementById('adicionar')
+
+        adicionar.addEventListener('click', function(event){
+            if (event) {
+                event.preventDefault()
+            }
+            const tabela = document.getElementById('competencias')
+            const linha = document.getElementById('linha').cloneNode(true)
+            for (let i=0; i < linha.children.length; i++){
+                if (linha.children[i].children[0].value){
+                    linha.children[i].children[0].value = ''
+                }
+            }
+            tabela.append(linha)
+        })
+    </script>
 </body>
 </html>

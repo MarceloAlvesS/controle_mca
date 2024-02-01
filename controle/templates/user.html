@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <title>Controle "<usuario>" </title>
+</head>
+<body>
+    <a href="{% url 'home' %}" id="voltar"><img src="{% static 'image/ir.png' %}" alt=""></a>
+    <div>
+        <div id="form">
+            <h1>{{request.user.username}}</h1> 
+            {% if mensagem_erro %}<p id="erro">(!) {{mensagem_erro}}</p> {% endif %}       
+            <a href="{% url 'nome' %}" class="mudar">Editar nome</a>
+            <a href="{% url 'senha' %}" class="mudar">Alterar senha</a>
+        </div>
+        <a href="{% url 'logout' %}">
+            <footer id="logout">
+                Sair
+            </footer>
+        </a>
+    </div>
+</body>
+</html>

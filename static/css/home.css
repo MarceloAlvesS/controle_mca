@@ -10,20 +10,35 @@ body {
 
 header {
     flex-grow: 0;
+    display: flex;
+}
+
+div#titulo {
+    flex-grow: 1;
 }
 
 h1 {
-    margin-bottom: 0px;
+    margin: 0px;
     margin-top: 20px;
     font-size: clamp(2em, 7em, 1em + 30vh);
+    text-align: center;
 }
 
 h2 {
-    margin-top: 0px;
+    margin: 0px;
     font-size: clamp(1.5em, 4.5em, 1em + 20vh);
+    position: relative;
+    top: 0px;
+    text-align: center;
 }
 
-div {
+a#user {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+div#caminhos {
     display: flex;
     justify-content: space-evenly;
     flex-grow: 1;
@@ -31,7 +46,7 @@ div {
     flex-wrap: wrap;
 }
 
-a {
+a.caminho {
     background-color: #8D9BA1;
     padding: 50px;
     box-shadow: 10px 10px #8F8478;

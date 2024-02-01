@@ -11,13 +11,16 @@
 </head>
 <body>
     <header id="primario">
-        <h1>CONTROLE</h1>
-        <h2>2024</h2>
+        <div id="titulo">
+            <h1>CONTROLE</h1>
+            <h2>2024</h2>
+        </div>
+        <a id="user" href="{% url 'usuario' %}">{{request.user|title}}</a>
     </header>
-    <div>
-        <a href="{% url 'empresas' 1 %}">EMPRESAS</a>
-        <a href="{% url 'obrigacoes' 1 %}">OBRIGAÇÕES</a>
-        <a href="{% url 'competencias' 1 %}">COMPETÊNCIAS</a>
+    <div id="caminhos">
+        <a class="caminho" href="{% url 'empresas' 1 %}">EMPRESAS</a>
+        <a class="caminho" href="{% url 'obrigacoes' 1 %}">OBRIGAÇÕES</a>
+        <a class="caminho" href="{% url 'competencias' %}">COMPETÊNCIAS</a>
     </div>
 
 </body>

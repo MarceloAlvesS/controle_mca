@@ -53,19 +53,15 @@ footer {
     flex-grow: 0;
 }
 
-a img {
-    scale: 0.5;
-}
-
 #anterior {
     transform: rotate(180deg);
     position: fixed;
-    left: 0px;
-    bottom: 0px;
+    left: 5px;
+    bottom: 5px;
 }
 
 #sucessor {
     position: fixed;
-    right: 0px;
-    bottom: 0px;
+    right: 5px;
+    bottom: 5px;
 }

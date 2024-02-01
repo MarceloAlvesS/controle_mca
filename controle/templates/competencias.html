@@ -20,13 +20,5 @@
         <a href="{% url 'competencia' competencia%}" class="caminho">{{competencia}}</a>
         {% endfor %}
     </div>
-    <footer>
-        {% if anterior %}
-        <a href="{% url 'competencias' pagina|add:-1%}"><img src="{% static 'image/ir.png' %}" alt="anterior" id="anterior"></a>
-        {% endif %}
-        {% if sucessor %}
-        <a href="{% url 'competencias' pagina|add:+1%}"><img src="{% static 'image/ir.png' %}" alt="sucessor" id="sucessor"></a>
-        {% endif %}
-    </footer>
 </body>
 </html>

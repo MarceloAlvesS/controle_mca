@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    {% if tipo == 'cadastrar' %}
+    <style>
+        form {
+            border-radius: 10px;
+        }
+    </style>
+    {% endif %}
+    <title>Controle "<usuario>" </title>
+</head>
+<body>
+    <div>
+        {% if tipo == 'cadastrar' %}
+        <a href="{% url 'login' %}" id="voltar"><img src="{% static 'image/ir.png' %}" alt=""></a>
+        {% endif %}
+        <form action="{% url tipo %}" method="post"> {% csrf_token %}
+            <h1>{{tipo|upper}}</h1>
+            {{form}}
+            <input type="submit" value="{{tipo|upper}}" class="submit">
+        </form>
+        {% if tipo == 'login' %}
+        <a href="{% url 'cadastrar' %}">
+            <footer>
+                Cadastre-se
+            </footer>
+        </a>
+        {% endif %}
+    </div>
+</body>
+</html>
