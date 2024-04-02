@@ -1,172 +1,71 @@
-from collections.abc import Mapping
-from typing import Any
 from django import forms
-from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
-from django.core.files.base import File
-from django.db.models.base import Model
-from django.forms.utils import ErrorList
+from django.apps import apps
 from .models import *
 
 
-
-class LoginForm(forms.Form):
-    username = forms.CharField(widget=forms.TextInput(
-        attrs={'placeholder': 'Nome'}), 
-        required=True, 
-        label='')
-    
-    password = forms.CharField(widget=forms.PasswordInput(
-        attrs={'placeholder': 'Senha'}), 
-        required=True,
-        label='')
-    
-    def clean_username(self):
-        return self.cleaned_data.get('username').strip().title()
-
-    def clean(self):
-        super(LoginForm, self).clean()
-        username = self.cleaned_data.get('username')
-        password = self.cleaned_data.get('password')
-        user = authenticate(username=username, password=password)
-        if not user:
-            raise ValidationError('Usuário ou senha invalido')
-
-
-class CadastrarForm(forms.Form):
-    username = forms.CharField(widget=forms.TextInput(
-        attrs={'placeholder': 'Nome'}), 
-        required=True, 
-        label='')
-    
-    password1 = forms.CharField(widget=forms.PasswordInput(
-        attrs={'placeholder': 'Senha'}), 
-        required=True,
-        label='')
-    
-    password2 = forms.CharField(widget=forms.PasswordInput(
-        attrs={'placeholder': 'Confirmar Senha'}), 
-        required=True,
-        label='')
-
-    def clean_username(self):
-        return self.cleaned_data.get('username').strip().title()
-
-    def clean(self):
-        super(CadastrarForm, self).clean()
-        username = self.cleaned_data.get('username')
-        password1 = self.cleaned_data.get('password1')
-        password2 = self.cleaned_data.get('password2')
-        
-        if User.objects.filter(username=username).first():
-            raise ValidationError('Usuário já existente')
-        if password1 != password2:
-            raise ValidationError('As senhas devem coincidir')
-        
-
-class Alterar_passwordForm(forms.Form):
-    password_atual = forms.CharField(widget=forms.PasswordInput(
-        attrs={'placeholder': 'Senha atual'}), 
-        required=True,
-        label='')
-    password1 = forms.CharField(widget=forms.PasswordInput(
-        attrs={'placeholder': 'Nova senha'}), 
-        required=True,
-        label='')
-    password2 = forms.CharField(widget=forms.PasswordInput(
-        attrs={'placeholder': 'Confirmar nova senha'}), 
-        required=True,
-        label='')
-    
-    def __init__(self, user: User, *args, **kwargs):
-        self.user = user
-        super().__init__(*args, **kwargs)
-        
-    def clean(self) -> dict[str, Any]:
-        super(Alterar_passwordForm, self).clean()
-
-        password_atual = self.cleaned_data.get('password_atual')
-        password1 = self.cleaned_data.get('password1')
-        password2 = self.cleaned_data.get('password2')
-        if not self.user.check_password(password_atual):
-            raise ValidationError('Senha invalida')
-        if password1 != password2:
-            raise ValidationError('As senhas devem coincidir')
-        if password1 == password_atual:
-            raise ValidationError('Não é possível alterar para senha já existente')
-        
-
-class Alterar_usernameForm(forms.Form):
-    username = forms.CharField(widget=forms.TextInput(
-        attrs={'placeholder': 'Novo nome'}), 
-        required=True, 
-        label='')
-    
-    password = forms.CharField(widget=forms.PasswordInput(
-        attrs={'placeholder': 'Confirme sua senha'}), 
-        required=True,
-        label='')
-    
-    def __init__(self, user: User,*args, **kwargs):
-        self.user = user
-        super().__init__(*args, **kwargs)
-    
-    def clean_username(self):
-        return self.cleaned_data.get('username').strip().title()
-
-    def clean(self):
-        super(Alterar_usernameForm, self).clean()
-        username = self.cleaned_data.get('username')
-        password = self.cleaned_data.get('password')
-        
-        if not self.user.check_password(password):
-            raise ('Senha inválida')
-        if User.objects.filter(username=username):
-            raise ValidationError('Nome já existente')
-
-class EmpresaForm(forms.ModelForm):
-    class Meta:
-        model = Empresa
-        fields = ['nome']
-        widgets = {
-            'nome': forms.TextInput(attrs={
-                'placeholder': 'Empresa',
-                'class': 'titulo'
-            })}
-        labels = {
-            'nome': ''
-        }
-    
+def create_dynamic_titulo_form(model_name, fields=None, exclude=None):
     def clean_nome(self):
-        return self.cleaned_data.get('nome').upper()
+        return self.cleaned_data.get('nome').upper().strip()
+    
+    model = apps.get_model('controle', model_name)
+    Meta = type('Meta', (), {'model':model, 'fields':fields, 'exclude':exclude})
+    DynamicTituloForm = type(f'{model_name}Form', (forms.ModelForm,), {'Meta':Meta, 'clean_nome': clean_nome})
+    if DynamicTituloForm.base_fields.get('nome'):
+        DynamicTituloForm.base_fields['nome'].widget.attrs.update({'class': 'titulo', 'placeholder': model_name})
+        DynamicTituloForm.base_fields['nome'].label = ''
 
-class ObrigacaoForm(forms.ModelForm):
-    class Meta:
-        model = Obrigacao
-        fields = ['nome']
-        widgets = {
-            'nome': forms.TextInput(attrs={
-                'placeholder': 'Obrigação',
-            })}
-        labels = {
-            'nome': ''
-        }
+    return DynamicTituloForm
+        
 
-    def clean_nome(self):
-        return self.cleaned_data.get('nome').upper()
+class CompetenciaMensalForm(forms.ModelForm):
+    tipo = forms.CharField(max_length=23, label='', widget=forms.TextInput(attrs={'class':'competencia', 'autocomplete': 'off'}))
 
-class CompetenciaForm(forms.ModelForm):
-    tipo = forms.CharField(label='', widget=forms.TextInput(attrs={'class':'competencia'}))
     class  Meta:
         model = Competencia
-        fields = ['tipo', 'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro', 'obs']
-        widgets = {field: forms.TextInput(attrs={'class': 'competencia', 'autocomplete':'off'}) for field in fields[:-1]}
+        fields = ['tipo'] + Competencia.meses + ['obs']
+        widgets = {field:forms.TextInput(attrs={'class': 'competencia', 'autocomplete':'off'}) for field in fields}
         widgets.update({'obs': forms.Textarea(attrs={
             'class': 'competencia',
             'rows': 1})})
         labels = {field:'' for field in fields}
     
+    def __init__(self, *args, **kwargs):
+        tipo = kwargs.pop('tipo', None)
+        if not kwargs.get('prefix'):
+            kwargs['prefix'] = 'M'
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['id'] = field
+            self.fields[field].widget.attrs['id'] = self.fields[field].widget.attrs['id'][:3] + self.fields[field].widget.attrs['id'][5:]
+
+        if tipo:
+            self.fields['tipo'].widget.attrs['value'] = tipo
+
     def clean_tipo(self):
-        return self.cleaned_data.get('tipo').upper()
+        return self.cleaned_data.get('tipo').upper().strip()
         
+
+class CompetenciaAnualForm(forms.ModelForm):
+    tipo = forms.CharField(max_length=23, label='', widget=forms.TextInput(attrs={'class':'competencia', 'autocomplete': 'off'}))
+    class Meta:
+        model = Competencia
+        fields = ['tipo', 'anual', 'obs']
+        widgets = {field:forms.TextInput(attrs={'class': 'competencia', 'autocomplete':'off'}) for field in fields}
+        widgets.update({'obs': forms.Textarea(attrs={
+            'class': 'competencia',
+            'rows': 1})})
+        labels = {field:'' for field in fields}
+
+    def __init__(self, *args, **kwargs):
+        tipo = kwargs.pop('tipo', None)
+        if not kwargs.get('prefix'):
+            kwargs['prefix'] = 'A'
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['id'] = field
+        if tipo:
+            self.fields['tipo'].widget.attrs['value'] = tipo
+
+    def clean_tipo(self):
+        return self.cleaned_data.get('tipo').upper().strip()
+    

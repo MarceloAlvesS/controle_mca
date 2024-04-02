@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  {% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/administrador/tipos.css' %}">
+  <title>Controle MCA</title>
+</head>
+<body>
+  <header>
+    <a href="{% url 'home_admin' %}" id="fechar"><img src="{% static 'image/fechar.png' %}" alt=""></a>
+  </header>   
+  <form method="POST">
+    {% csrf_token %}
+    <table>
+      <thead>
+        <tr>
+          {% if tipo.plural != 'competencias' %}
+          <th class='checkbox_coluna'>Del</th>
+          {% endif %}
+          <th>{{tipo.plural|title}}</th>
+          {% if tipo.plural == 'empresas' %}
+          <th>Usuarios</th>
+          {% elif tipo.plural == 'contabil' %}
+          <th>Função</th>
+          {% endif %}
+        </tr>
+      </thead>
+      {% for conteudo in conteudos %}
+      <tr>
+          {% if tipo.plural != 'competencias' %}
+          <td class='checkbox_coluna'><input type="checkbox" name="caixas_selecionadas"  value="{{conteudo}}"></td>
+          {% endif %}
+        <td><a href="{% url link conteudo %}">{{conteudo|title}}</a></td>
+        {% if tipo.plural == 'empresas' %}
+          {% for user in conteudo.usuarios.all.distinct %}
+          <td><a href="{% url 'home' user %}">{{user}}</a></td>
+          {% endfor %}
+        {% elif tipo.plural == 'contabil' %}
+          {% if conteudo.groups.first %}
+          <td>{{conteudo.groups.first|title}}</td>
+          {% else %}
+          <td></td>
+          {% endif %}
+        {% endif %}
+      </tr>
+      {% endfor %}
+      {% if tipo.plural != 'competencias' %}
+      <tr>
+        <td class="checkbox_coluna">
+          <input id="submit" type="submit" value="Deletar">
+        </td>
+      </tr>
+      {% endif %}
+    </table>
+    
+  </form>
+</body>
+</html>

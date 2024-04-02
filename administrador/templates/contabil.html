@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  {% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/administrador/tipos.css' %}">
+  <title>Controle MCA</title>
+</head>
+<body>
+  <header>
+    <h1>{{tipo.singular|title}}</h1>
+  </header>
+  <div id="principal">
+    {% for conteudo in conteudos %}
+    <div class="linha"><a href="{% url 'home' conteudo %}">{{conteudo}}</a></div>
+    {% endfor %}
+  </div>
+</body>
+</html>

@@ -18,11 +18,11 @@
         <div id="titulo">
             <h1>OBRIGAÇÕES</h1>
         </div>
-        <a href="{% url 'home' %}" id="fechar"><img src="{% static 'image/fechar.png' %}" alt=""></a>
+        <a href="{% url 'home' client %}" id="fechar"><img src="{% static 'image/fechar.png' %}" alt=""></a>
     </header>
     <div id="caminho">
         {% for obrigacao in obrigacoes %}
-        <a href="{% url 'obrigacao' obrigacao%}" class="caminho">{{obrigacao}}</a>
+        <a href="{% url 'editar_obrigacao' client obrigacao %}" class="caminho">{{obrigacao}}</a>
         {% endfor %}
     </div>
     <footer>

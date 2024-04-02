@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/terciario.css' %}">
+    <title>Controle "<usuario>" </title>
+    </head>
+    <body>
+        <form method="post" id="formulario"> {% csrf_token %}
+        <header>
+            <a href="{% url tipo.plural client 1 %}" id="voltar"><img src="{% static 'image/ir.png'%}" alt="voltar"></a>
+            {{tituloForm.nome}}
+            <a href="{% url 'home' client %}" id="fechar"><img src="{% static 'image/fechar.png'%}" alt="voltar"></a>
+        </header>
+
+        <div id="utilidade_geral">
+            {% if tipo.plural == 'empresas' %}
+                <div>
+                    <h3 id="tipo">Tributação</h3>
+                    {{tituloForm.enquadramento}}
+                </div>
+            {% elif tipo.plural == 'obrigacoes' %}
+                <div>
+                    <h3 id="tipo">Formato</h3>
+                    {{tituloForm.formato}}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div id="tabelas"> 
+            {% if tipo.plural == 'empresas' or tipo.formato == 'A' or tipo.metodo == 'criar' %}
+            <div id="anual" class="tabela">
+                {% include 'tabela/utilidade.html' %}
+                <div class="linha thead">
+                    <div class="cabecalho tipo">{%if tipo.plural == 'empresas'%}Obrigações{%elif tipo.plural == 'obrigacoes'%}Empresas{%endif%}</div>
+                    <div class="cabecalho">ANUAL</div>
+                    <div class="cabecalho obs">OBS</div>
+                </div>
+                {% if tipo.plural == 'obrigacoes' and tipo.metodo == 'editar' %}
+                    {% include 'tabela/tabela_competencias.html' %}
+                {% else %}
+                    {% include 'tabela/tabela_competencias.html' with competenciaForm_list=competenciaForm_list.1 %}
+                {% endif %}
+            </div>
+            {% endif %}
+            {% if tipo.plural == 'empresas' or tipo.formato == 'M' or tipo.metodo == 'criar' %}
+            <div id="mensal" class="tabela">
+                {% include 'tabela/utilidade.html' %}
+                <div class="linha thead">
+                    <div class="cabecalho tipo">{%if tipo.plural == 'empresas'%}Obrigações{%elif tipo.plural == 'obrigacoes'%}Empresas{%endif%}</div>
+                    <div class="cabecalho">JAN</div>
+                    <div class="cabecalho">FEV</div>
+                    <div class="cabecalho">MAR</div>
+                    <div class="cabecalho">ABR</div>
+                    <div class="cabecalho">MAI</div>
+                    <div class="cabecalho">JUN</div>
+                    <div class="cabecalho">JUL</div>
+                    <div class="cabecalho">AGO</div>
+                    <div class="cabecalho">SET</div>
+                    <div class="cabecalho">OUT</div>
+                    <div class="cabecalho">NOV</div>
+                    <div class="cabecalho">DEZ</div>
+                    <div class="cabecalho obs">OBS</div>
+                </div>
+                
+                {% if tipo.plural == 'obrigacoes' and tipo.metodo == 'editar' %}
+                    {% include 'tabela/tabela_competencias.html' %}
+                {% else %}
+                    {% include 'tabela/tabela_competencias.html' with competenciaForm_list=competenciaForm_list.0 %}
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+        <div>
+            <input type="submit"  id="buttom_submit" value="Salvar ">
+        </div>
+    </form>
+    <script src="{% static 'js/events.js' %}"></script>
+    {% if tipo.plural == 'obrigacoes' and tipo.metodo == 'criar' %}
+    <script src="{% static 'js/formato.js' %}"></script>
+    {% endif %}
+</body>
+</html>

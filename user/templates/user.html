@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+{% load static %}
+{% load permission_tags %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <title>Controle "<usuario>" </title>
+</head>
+<body>
+    {% if request.user|can:'ver_area_administrativa' %}
+    <a href="{% url 'home_admin' %}" id="voltar"><img src="{% static 'image/ir.png' %}" alt=""></a>
+    {% else %}
+    <a href="{% url 'home' request.user %}" id="voltar"><img src="{% static 'image/ir.png' %}" alt=""></a>
+    {% endif %}
+    <div>
+        <div id="form">
+            <h1>{{request.user.username}}</h1> 
+            {% if mensagem_erro %}<p id="erro">(!) {{mensagem_erro}}</p> {% endif %}       
+            <a href="{% url 'nome' %}" class="mudar">Editar nome</a>
+            <a href="{% url 'senha' %}" class="mudar">Alterar senha</a>
+        </div>
+        <a href="{% url 'logout' %}">
+            <footer id="logout">
+                Sair
+            </footer>
+        </a>
+    </div>
+</body>
+</html>

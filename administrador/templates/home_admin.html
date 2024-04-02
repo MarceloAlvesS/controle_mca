@@ -1,0 +1,24 @@
+<!DOCTYPE html> 
+<html lang="pt-br">
+  {% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/administrador/home.css' %}">
+  <title>Controle MCA</title>
+</head>
+<body>
+  <header>
+    <a id="user" href="{% url 'usuario' %}">{{request.user|title}}</a>
+    <h1>Área Adminitrativa</h1>
+  </header>
+  <div id="principal">
+    <a href="{% url 'home' request.user %}" class="conteudo" id="eu">Minha Área</a>
+    <a href="{% url 'contabil_admin' %}" class="conteudo">Usuarios</a>
+    <a href="{% url 'empresas_admin' %}" class="conteudo">Empresas</a>
+    <a href="{% url 'obrigacoes_admin' %}" class="conteudo">Obrigações</a>
+    <a href="{% url 'competencias_admin' %}" class="conteudo">Competencias</a>
+  </div>
+</body>
+</html> 
+

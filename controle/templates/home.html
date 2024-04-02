@@ -2,25 +2,30 @@
 <html lang="pt-br">
 
 {% load static %}
+{% load permission_tags %}
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <title>Controle "<usuario>" </title>
+    <title>Controle MCA</title>
 </head>
 <body>
     <header id="primario">
         <div id="titulo">
             <h1>CONTROLE</h1>
-            <h2>2024</h2>
+            <h2>{{client}}</h2>
         </div>
+        {% if request.user|can:'ver_area_administrativa' %}
+        <a href="{% url 'home_admin' %}" id="administrador"><img src="{% static 'image/fechar.png' %}" alt=""></a>
+        {% else %}
         <a id="user" href="{% url 'usuario' %}">{{request.user|title}}</a>
+        {% endif %}
     </header>
     <div id="caminhos">
-        <a class="caminho" href="{% url 'empresas' 1 %}">EMPRESAS</a>
-        <a class="caminho" href="{% url 'obrigacoes' 1 %}">OBRIGAÇÕES</a>
-        <a class="caminho" href="{% url 'competencias' %}">COMPETÊNCIAS</a>
+        <a class="caminho" href="{% url 'empresas' client 1 %}">EMPRESAS</a>
+        <a class="caminho" href="{% url 'obrigacoes' client 1 %}">OBRIGAÇÕES</a>
+        <a class="caminho" href="{% url 'competencias' client %}">COMPETÊNCIAS</a>
     </div>
 
 </body>

@@ -1,0 +1,13 @@
+{% for competenciaForm in competenciaForm_list %}
+<div class="linha" id="linha">
+    {% for input in competenciaForm %}
+    {% if input.name ==  'obs' %}
+    <div class="conteudo {{input.name}}"> {{input}} </div>
+    {% elif input.name == 'tipo' %}
+    <div class="conteudo {{input.name}}"> {{input}} <div class="delete"></div> </div>
+    {% else %}
+    <div class="conteudo {{input.name}}"> {{input}} </div>
+    {% endif %}
+    {% endfor %}
+</div>
+{% endfor %}

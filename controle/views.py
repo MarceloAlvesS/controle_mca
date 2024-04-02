@@ -1,224 +1,300 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
-from django.contrib.auth import login as login_django
-from django.contrib.auth import logout as logout_django
 from django.contrib.auth.decorators import login_required
-from .forms import *
-from .models import Obrigacao, Empresa
-import pandas as pd
-from .utils import model_register
+from django.core.exceptions import ObjectDoesNotExist
+from controle.forms import *
+from controle.models import Obrigacao, Empresa, Competencia
+from controle.utils import *
+from django.conf import settings
+
+@login_required(login_url=settings.LOGIN_URL)
+@check_permission(permission='ver_funcionarios')
+def home(request, client):
+    context = {'client': client}
+    return render(request, 'home.html', context=context)
 
 
-@login_required(login_url='/controle/login/')
-def home(request):
-    return render(request, 'home.html')
+@login_required(login_url=settings.LOGIN_URL)
+@check_permission(permission='ver_funcionarios')
+def empresas(request, client, pagina=0):
+    context = {'client': client}
 
-
-@login_required(login_url='/controle/login/')
-def empresas(request, pagina=0):
     if pagina == 0:
-        return redirect('empresas', 1)
-    empresas = Empresa.objects.filter(usuario=request.user)
-    empresas_selecionadas = empresas[pagina*12-12:pagina*12]
-    anterior = pagina > 1
-    sucesso = len(empresas) > pagina*12
-    context = {
-        'empresas': empresas_selecionadas,
-        'anterior': anterior,
-        'sucessor': sucesso,
+        return redirect('empresas', client, 1)
+
+    usuario = get_user_from(client)
+    empresas = usuario.empresas.distinct().order_by('nome')
+    selecionados = get_tipos(empresas, pagina, 12)
+
+    context.update({
+        'conteudos': selecionados['empresas_selecionadas'],
+        'anterior': selecionados['anterior'],
+        'sucessor': selecionados['sucesso'],
         'pagina': pagina,
+        'tipo': {'singular': 'empresa',
+                 'plural': 'empresas',
+                 'correcao': 'empresas'}
+    })
+
+    return render(request, 'tipos.html', context=context)
+
+
+@login_required(login_url=settings.LOGIN_URL)
+@check_permission(permission='ver_funcionarios')
+def criar_empresa(request, client):
+    context = {'client': client}
+    usuario = get_user_from(client)
+
+    formularios = {
+        'titulo':create_dynamic_titulo_form(model_name='Empresa', fields=['nome', 'enquadramento']),
+        'competencia_mensal': CompetenciaMensalForm,
+        'competencia_anual': CompetenciaAnualForm,
     }
 
-    return render(request, 'empresas.html', context=context)
+    match request.method:
+        case 'GET':
+            tituloForm = formularios['titulo'](auto_id='id_%s_editavel')
 
+        case 'POST':
+            tituloForm = formularios['titulo'](request.POST, auto_id='id_%s_editavel')
+            if tituloForm.is_valid():
+                empresa = model_register(Empresa, **tituloForm.cleaned_data)
 
-@login_required(login_url='/controle/login/')
-def empresa_view(request, empresa):
-    context = {}
-    empresa = Empresa.objects.filter(nome=empresa).first()
-    if not empresa:
-        return redirect('criar_empresa')
-    competencias = empresa.competencias.all()
+                competencias_anuais = get_competencias(POST=request.POST, names=['A-tipo', 'A-anual', 'A-obs'])
+                competencias_mensais = get_competencias(POST=request.POST, names=['M-tipo', 'M-janeiro', 'M-fevereiro', 'M-março', 'M-abril', 'M-maio', 'M-junho', 'M-julho', 'M-agosto', 'M-setembro', 'M-outubro', 'M-novembro', 'M-dezembro', 'M-obs'])
+
+                competenciasForm = get_forms_from_competencias(competencias_anuais=competencias_anuais, competencias_mensais=competencias_mensais)
+                for form in competenciasForm:
+                    competencia_register(formulario=form['competenciaForm'], model=Obrigacao, formato=form['formato'], empresa=empresa, usuario=usuario)
+
+                return redirect('editar_empresa', client, empresa)
+            else:
+                print(tituloForm.errors)
+            
+    competenciaForm_list = [[formularios['competencia_mensal']()],[formularios['competencia_anual']()]]
+    context['tipo'] = {'plural':'empresas', 'metodo': 'criar'}
+    context['tituloForm'] = tituloForm
+    context['competenciaForm_list'] = competenciaForm_list
+    return render(request, 'tipo.html', context=context)
+            
+
+@login_required(login_url=settings.LOGIN_URL)
+@check_permission(permission='ver_funcionarios')
+def editar_empresa(request, client, empresa_nome):
+    if not empresa_nome.isupper():
+        return redirect('editar_empresa', client, empresa_nome.upper())
+    
+    context = {'client': client}
+    usuario = get_user_from(client)
+    
+    try:
+        empresa = usuario.empresas.distinct().get(nome=empresa_nome)
+    except ObjectDoesNotExist:
+        return redirect('empresas', client, 1)
+
+    match request.method:
+        case 'GET':
+            tituloForm = create_dynamic_titulo_form('Empresa', ['nome', 'enquadramento'])(instance=empresa)
+        case 'POST':
+            tituloForm = create_dynamic_titulo_form('Empresa', ['nome', 'enquadramento'])(request.POST, instance=empresa)
+            if tituloForm.is_valid():
+                empresa.save()
+                empresa = model_register(Empresa, **tituloForm.cleaned_data)
+
+                competencias_anuais = get_competencias(POST=request.POST, names=['A-tipo', 'A-anual', 'A-obs'])
+                competencias_mensais = get_competencias(POST=request.POST, names=['M-tipo', 'M-janeiro', 'M-fevereiro', 'M-março', 'M-abril', 'M-maio', 'M-junho', 'M-julho', 'M-agosto', 'M-setembro', 'M-outubro', 'M-novembro', 'M-dezembro', 'M-obs'])
+                deleted_competencias(empresa, competencias_anuais+competencias_mensais).delete()
+                competenciasForm = get_forms_from_competencias(competencias_anuais=competencias_anuais, competencias_mensais=competencias_mensais)
+                for form in competenciasForm:
+                    competencia_register(formulario=form['competenciaForm'], model=Obrigacao, formato=form['formato'], empresa=empresa, usuario=usuario)
+            else:
+                print(tituloForm.errors)
+
+    competencias_mensais = Competencia.objects.filter(empresa=empresa, usuario=usuario, obrigacao__formato='M').order_by('obrigacao__nome')
+    competencias_anuais = Competencia.objects.filter(empresa=empresa, usuario=usuario, obrigacao__formato='A').order_by('obrigacao__nome')
     
 
-    if request.method == 'GET':
-        empresaForm = EmpresaForm(instance=empresa)
-        competenciaForm = CompetenciaForm()
-        # competenciaForm_list = [CompetenciaForm(instance=competencia) for competencia in competencias]
+    competenciasForm_list = [[CompetenciaMensalForm(tipo=competencia.obrigacao, instance=competencia) for competencia in competencias_mensais], [CompetenciaAnualForm(tipo=competencia.obrigacao, instance=competencia) for competencia in competencias_anuais]]
+    formato_competenciasForm = [CompetenciaMensalForm, CompetenciaAnualForm] 
+    for i, formato in enumerate(competenciasForm_list):
+        if not formato:
+            competenciasForm_list[i].append(formato_competenciasForm[i]())
 
-    context['empresaForm'] = empresaForm
-    # context['competenciaForm_list'] = competenciaForm_list
-    context['competenciaForm'] = competenciaForm
-    return render(request, 'empresa.html', context=context)
-
-
-@login_required(login_url='/controle/login/')
-def empresa_criar(request):
-    context = {}
-    if request.method == 'GET':
-        empresaForm = EmpresaForm()
-        competenciaForm = CompetenciaForm()
-    elif request.method == 'POST':
-        empresaForm = EmpresaForm(request.POST)
-        if empresaForm.is_valid():
-            nome = empresaForm.cleaned_data.get('nome')
-            empresa = model_register(Empresa, usuario=request.user, nome=nome)
-            post = dict(request.POST).copy()
-            del post['nome']
-            del post['csrfmiddlewaretoken']
-            post = pd.DataFrame(post).to_dict(orient='records')
-            for competencia in post:
-                competenciaForm = CompetenciaForm(competencia)
-                if competenciaForm.is_valid():
-                    nome = competenciaForm.cleaned_data.get('tipo')
-                    obrigacao = model_register(Obrigacao, nome=nome)
-                    del competencia['tipo']
-                    competencias = Competencia.objects.filter(empresa=empresa, obrigacao=obrigacao)
-                    if competencias:
-                        competencias.update(**competencia)
-                    else:
-                        empresa.obrigacoes.add(obrigacao, through_defaults=competencia) 
-            return redirect('empresa', empresa)
-                        
+    context['tipo'] = {'plural': 'empresas', 'metodo':'editar'}
+    context['tituloForm'] = tituloForm
+    context['competenciaForm_list'] = competenciasForm_list
+    return render(request, 'tipo.html', context=context)
 
 
-    context['empresaForm'] = EmpresaForm
-    context['competenciaForm'] = CompetenciaForm
-    return render(request, 'empresa.html', context=context)
-
-
-@login_required(login_url='/controle/login/')
-def obrigacoes(request, pagina=0):
+@login_required(login_url=settings.LOGIN_URL)
+@check_permission(permission='ver_funcionarios')
+def obrigacoes(request, client, pagina=0):
+    context = {'client': client}
     if pagina == 0:
         return redirect('obrigacoes', 1)
-    obrigacoes = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm']
+    
+    usuario = get_user_from(client)
+    obrigacoes = usuario.obrigacoes.distinct().order_by('nome')
     obrigacoes_selecionadas = obrigacoes[(pagina-1)*16:pagina*16]
-    anterior = pagina > 1
-    sucesso = len(obrigacoes) > pagina*16
-    context = {
-        'obrigacoes': obrigacoes_selecionadas,
-        'anterior': anterior,
-        'sucessor': sucesso,
+    context.update({
+        'conteudos': obrigacoes_selecionadas,
+        'anterior': pagina > 1,
+        'sucessor': len(obrigacoes) > pagina*16,
         'pagina': pagina,
-    }
+        'tipo': {'plural':'obrigacoes', 
+                 'singular':'obrigacao', 
+                 'correcao':'obrigações'}
+    })
 
-    return render(request, 'obrigacoes.html', context=context)
-
-
-@login_required(login_url='/controle/login/')
-def obrigacao_view(request, obrigacao):
-    return HttpResponse(f'olá {obrigacao}')
+    return render(request, 'tipos.html', context=context)
 
 
-@login_required(login_url='/controle/login/')
-def competencias(request):
-    competencias = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
-    context = {
-        'competencias': competencias,
-    }
-    return render(request, 'competencias.html', context=context)
-
-
-@login_required(login_url='/controle/login/')
-def competencia(request, competencia):
-    return HttpResponse(f'olá {competencia}')
-
-
-@login_required(login_url='/controle/login/')
-def usuario(request):
-    return render(request, 'user.html')
-
-
-def login(request):
-    context = {
-        'tipo': 'login',
-    }
-
-    if request.method == 'GET':
-        form = LoginForm()
-        
-    elif request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            login_django(request, authenticate(username=username, password=password))
-            return redirect('home')
-        
-    context['form'] = form
-    return render(request, 'login.html', context=context)
-        
-
-def cadastrar(request):
-    context = {
-        'tipo': 'cadastrar',
-    }
+@login_required(login_url=settings.LOGIN_URL)
+@check_permission(permission='ver_funcionarios')
+def criar_obrigacao(request, client):
+    context = {'client': client}
+    usuario = get_user_from(client)
     
-    if request.method == 'GET':
-        form = CadastrarForm()
-    elif request.method == 'POST':
-        form = CadastrarForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password1')
-            user = User.objects.create_user(username=username, password=password)
-            user.save()
-            return redirect('login')
-    context['form'] = form
-    return render(request, 'login.html', context=context)
-        
+    formularios = {
+        'titulo': create_dynamic_titulo_form(model_name='Obrigacao', fields=['nome', 'formato']),
+        'competencia_mensal': CompetenciaMensalForm,
+        'competencia_anual': CompetenciaAnualForm,
+    } 
+    match request.method:
+        case 'GET':
+            tituloForm = formularios['titulo']()
 
-@login_required(login_url='/controle/login/')
-def logout(request):
-    logout_django(request)
-    return redirect('login')
+        case 'POST':
+            tituloForm = formularios['titulo'](request.POST)
+            if tituloForm.is_valid():
+                obrigacao = model_register(Obrigacao, **tituloForm.cleaned_data)
+                
+                competencias = get_competencias(POST=request.POST, names=['M-tipo', 'M-janeiro', 'M-fevereiro', 'M-março', 'M-abril', 'M-maio', 'M-junho', 'M-julho', 'M-agosto', 'M-setembro', 'M-outubro', 'M-novembro', 'M-dezembro', 'M-obs'] if obrigacao.formato == 'M' else ['A-tipo', 'A-anual', 'A-obs'])
+
+                competenciasForm = get_forms_from_competencias(competencias_anuais=competencias) if obrigacao.formato == 'A' else get_forms_from_competencias(competencias_mensais=competencias)
+                for form in competenciasForm:
+                    competencia_register(formulario=form['competenciaForm'], model=Empresa, obrigacao=obrigacao, usuario=usuario)
+
+                return redirect('editar_obrigacao', client, obrigacao)
+            else:
+                print(tituloForm.errors)
+
+    competenciaForm_list =  [[formularios['competencia_mensal']()], [formularios['competencia_anual']()]]
+    context['tipo'] = {'plural': 'obrigacoes', 'metodo':'criar'}
+    context['tituloForm'] = tituloForm
+    context['competenciaForm_list'] = competenciaForm_list
+    return render(request, 'tipo.html', context=context)
 
 
-@login_required(login_url='/controle/login/')
-def alterar_password(request):
-    context = {
-        'tipo': 'senha'
-    }
+@login_required(login_url=settings.LOGIN_URL)
+@check_permission(permission='ver_funcionarios')
+def editar_obrigacao(request, client, obrigacao_nome):
 
-    if request.method == 'GET':
-        form = Alterar_passwordForm(request.user)
-    elif request.method == 'POST':
-        form = Alterar_passwordForm(request.user, request.POST)
-        if form.is_valid():
-            password1 = form.cleaned_data.get('password1')
-            username = request.user.username
-            user = request.user
-            user.set_password(password1)
-            user.save()
-            login_django(request, authenticate(username=username, password=password1))
-            return redirect('usuario')
+    # Verificando se a obrigacao_name está na formatação correta
+    if not obrigacao_nome.isupper():
+        return redirect('editar_obrigacao', client, obrigacao_nome.upper())
+    
+    # variaveis padrões
+    context = {'client': client}
+    usuario = get_user_from(client)
+
+    # verificando se a obrigação existe
+    try:
+        obrigacao = usuario.obrigacoes.distinct().get(nome=obrigacao_nome)
+    except ObjectDoesNotExist:
+        return redirect('obrigacoes', client, 1)
+
+
+    # Casos para method GET e POST
+    match request.method:
+        case 'GET':
+            # Atribuição dos form das obrigações
+            tituloForm = create_dynamic_titulo_form('Obrigacao', ['nome', 'formato'])(instance=obrigacao)
+
+        case 'POST':
+            tituloForm = create_dynamic_titulo_form('Obrigacao', ['nome', 'formato'])(request.POST, instance=obrigacao)
+            formato_antes = obrigacao.formato
+            if tituloForm.is_valid():
+                obrigacao.save()
+                
+                competencias = get_competencias(POST=request.POST, names=['M-tipo', 'M-janeiro', 'M-fevereiro', 'M-março', 'M-abril', 'M-maio', 'M-junho', 'M-julho', 'M-agosto', 'M-setembro', 'M-outubro', 'M-novembro', 'M-dezembro', 'M-obs'] if formato_antes == 'M' else ['A-tipo', 'A-anual', 'A-obs'])
+
+                # Deletando competencias não encontradas no formulario
+                deleted_competencias(obrigacao, competencias).delete()
+                    
+                competenciasForm = get_forms_from_competencias(competencias_anuais=competencias) if obrigacao.formato == 'A' else get_forms_from_competencias(competencias_mensais=competencias)
+                for form in competenciasForm:
+                    competencia_register(formulario=form['competenciaForm'], model=Empresa, obrigacao=obrigacao, usuario=usuario)
+
+                return redirect('editar_obrigacao', client, obrigacao)
+            else:
+                print(tituloForm.errors)
+
+    competencias = Competencia.objects.filter(obrigacao=obrigacao, usuario=usuario).order_by('empresa__nome')
+
+    competenciasForm_list = [CompetenciaMensalForm(tipo=competencia.empresa, instance=competencia) if obrigacao.formato == 'M' else CompetenciaAnualForm(tipo=competencia.empresa, instance=competencia) for competencia in competencias]
+    if not competenciasForm_list:
+        competenciasForm_list = [CompetenciaMensalForm() if obrigacao.formato == 'M' else CompetenciaAnualForm()]
+
+
+    context['tipo'] = {'plural': 'obrigacoes', 'metodo':'editar', 'formato': obrigacao.formato}
+    context['tituloForm'] = tituloForm
+
+    context['competenciaForm_list'] = competenciasForm_list
+    return render(request, 'tipo.html', context=context)
+
+
+@login_required(login_url=settings.LOGIN_URL)
+@check_permission(permission='ver_funcionarios')
+def competencias(request, client):
+    context = {'client': client}
+    competencias = Competencia.meses + ['anual']
+    context.update({
+        'tipo': {'plural':'competencias', 
+                 'singular':'competencia', 
+                 'correcao':'competencias'},
+        'conteudos': competencias
+    })
+    return render(request, 'tipos.html', context=context)
+
+
+@login_required(login_url=settings.LOGIN_URL)
+@check_permission(permission='ver_funcionarios')
+def visualizar_competencia(request, client, mes:str):
+    if not mes.islower():
+        return redirect('editar_competencia', client, mes.lower())
+    if not mes in Competencia.meses + ['anual']:
+        return redirect('competencias', client)
+
+    if mes == 'anual':
+        formato = 'A'
+    else:
+        formato = 'M'
+
+    context = {'client': client}
+
+    usuario = get_user_from(client)
+
+    empresas = usuario.empresas.all().distinct().order_by('enquadramento', 'nome')
+    obrigacoes = usuario.obrigacoes.filter(formato=formato).distinct().order_by('nome')
+    
+    tabela = {}
+    for empresa in empresas:
+        tabela[empresa] = []
+        for obrigacao in obrigacoes:
+            competencia = Competencia.objects.filter(empresa=empresa, obrigacao=obrigacao, usuario=usuario)
+            valor_mes = competencia.values_list(mes).first()
+            if valor_mes:
+                if valor_mes[0]:
+                    valor_mes = valor_mes[0]
+                else:
+                    valor_mes = ''
+            else:
+                valor_mes = '-'
+            tabela[empresa].append(valor_mes)
     
 
-    context['form'] = form
-    return render(request, 'alterar_user.html', context=context)
-
-
-@login_required(login_url='/controle/login/')
-def alterar_username(request):
-    context = {
-        'tipo': 'username'
-    }
-
-    if request.method == 'GET':
-        form = Alterar_usernameForm(request.user)
-    
-    elif request.method == 'POST':
-        form = Alterar_usernameForm(request.user, request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = request.user
-            user.username =  username
-            user.save()
-            login_django(request, authenticate(username=username, password=password))
-            return redirect('usuario')
-
-    context['form'] = form
-    return render(request, 'alterar_user.html', context=context)
-    
+    context['tipo'] = ['competencias']
+    context['mes'] = mes
+    context['conteudo'] = {'tabela': tabela, 'obrigacoes': obrigacoes, 'empresas':empresas}
+    return render(request, 'competencia.html', context)

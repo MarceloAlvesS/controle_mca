@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/competencia.css' %}">
+    <title>Controle "<usuario>" </title>
+</head>
+<body>
+        
+        <header>
+            <a href="{% url tipo.0 client %}" id="voltar"><img src="{% static 'image/ir.png'%}" alt="voltar"></a>
+            <h1>{{mes|title}}</h1>
+            <a href="{% url 'home' client %}" id="fechar"><img src="{% static 'image/fechar.png'%}" alt="voltar"></a>
+        </header>
+        
+        <table id="mensal">
+            <thead class="obrigacoes">
+                <tr>
+                    <th>{{'empresas'|upper  }}</th>
+                {% for obrigacao in conteudo.obrigacoes %}
+                    <th class="conteudo">{{obrigacao}}</th>
+                {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for empresa, valores_competencia in conteudo.tabela.items %}
+                <tr>
+                    <td>
+                        {{empresa}}
+                    </td>
+                    {% for valor_competencia in valores_competencia %}
+                    {% if valor_competencia == '-' %}
+                    <td class="inexistente">
+                    </td>
+                    {% else %}
+                    <td class="existente">
+                        {{valor_competencia}}
+                    </td>
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+</body>
+</html>

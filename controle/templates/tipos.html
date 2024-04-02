@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/secundario.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% if tipo.plural == 'competencias' %}
+        <style>
+            a.caminho {
+                height: 17vh;
+            }
+            a.anual {
+                grid-column-end: -1;
+                grid-column-start: 1;
+                width: auto;
+            }
+        </style>
+    {% endif %}
+    <title>Controle MCA</title>
+</head>
+<body>
+    <header id="secundario">
+        {% if tipo.singular != 'competencia' %}
+        <a href="{% url 'criar_'|add:tipo.singular client %}" id="criar">+</a>
+        {% endif %}
+        <div id="titulo">
+            <h1>{{tipo.correcao|upper}}</h1>
+        </div>
+        <a href="{% url 'home' client %}" id="fechar"><img src="{% static 'image/fechar.png' %}" alt=""></a>
+    </header>
+    <div id="caminho">
+        {% for conteudo in conteudos %}
+        <a href="{% url 'editar_'|add:tipo.singular client conteudo %}" class="caminho {% if conteudo == 'anual' %}anual{% endif %}">{{conteudo|upper}}</a>
+        {% endfor %}
+    </div>
+    <footer>
+        {% if anterior %}
+        <a href="{% url tipo.plural client pagina|add:-1 %}"><img src="{% static 'image/ir.png' %}" alt="anterior" id="anterior"></a>
+        {% endif %}
+        {% if sucessor %}
+        <a href="{% url tipo.plural client pagina|add:+1 %}"><img src="{% static 'image/ir.png' %}" alt="sucessor" id="sucessor"></a>
+        {% endif %}
+    </footer>
+</body>
+</html>
