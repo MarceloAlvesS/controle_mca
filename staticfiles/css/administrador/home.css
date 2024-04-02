@@ -1,0 +1,49 @@
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  background-color: #8DC7E0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+header {
+  text-align: center;
+}
+
+#user {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+
+header h1 {
+  font-size: 3em;
+}
+
+#principal {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+}
+
+#eu {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  width: fit-content;
+  justify-self: center;
+}
+
+.conteudo {
+  text-align: center;
+  text-decoration: none;
+  color: black;
+  padding: 25px;
+  background-color: gray;
+  border: black 1px solid;
+  border-radius: 5px;
+  font-size: 3em;
+  margin: 20px;
+}
+

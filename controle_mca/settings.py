@@ -33,11 +33,11 @@ DATABASES = {
     }
 }
 
-SECRET_KEY = os.environ.get('SECRET_KEY')
-DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(" ")
-database_url = os.environ.get('DATABASE_URL')
-DATABASES['default'] = dj_database_url.parse("postgres://controle_db_user:LK0b8BqXqDkC9E5szW6dFCD4rEd9baeS@dpg-co65ouf109ks73dosl90-a.oregon-postgres.render.com/controle_db")
+# SECRET_KEY = os.environ.get('SECRET_KEY')
+# DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+# ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(" ")
+# database_url = os.environ.get('DATABASE_URL')
+# DATABASES['default'] = dj_database_url.parse("postgres://controle_db_user:LK0b8BqXqDkC9E5szW6dFCD4rEd9baeS@dpg-co65ouf109ks73dosl90-a.oregon-postgres.render.com/controle_db")
 
 
 # Application definition
