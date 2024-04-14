@@ -50,15 +50,16 @@ function enquadrar(event) {
       element.click()
   });
   let valor = event.target.value
-  for (let obrigacao in enquadramentos[valor][0]) {
+  let enquadramento = enquadramentos[valor]
+  for (let obrigacao in enquadramento[0]) {
     let linha = linha_mensal.cloneNode(true)
-    linha.children[0].children[0].value = enquadramentos[valor][0][obrigacao].toUpperCase()
+    linha.children[0].children[0].value = enquadramento[0].sort()[obrigacao].toUpperCase()
     linha.children[0].children[1].addEventListener('click', deletar) 
     document.getElementById('mensal').appendChild(linha)
   }
-  for (let obrigacao in enquadramentos[valor][1]) {
+  for (let obrigacao in enquadramento[1]) {
     let linha = linha_anual.cloneNode(true)
-    linha.children[0].children[0].value = enquadramentos[valor][1][obrigacao].toUpperCase()
+    linha.children[0].children[0].value = enquadramento[1].sort()[obrigacao].toUpperCase()
     linha.children[0].children[1].addEventListener('click', deletar) 
 
     document.getElementById('anual').appendChild(linha)
@@ -96,10 +97,11 @@ document.querySelectorAll('.delete').forEach(element => {
 
 const enquadramentos = {
   '': [[],[]],
-  's-m': [['fiscal', 'contabil', 'reinf', 'sintegra', 'parcelamento', 'destda', 'importação'],['dirf', 'defis', 'sped ecd']],
-  's-f': [['fiscal', 'reinf', 'importação'], []],
   'l-m': [['fiscal', 'contabil', 'sped fiscal', 'dctf', 'parcelamento', 'importação'], ['dirf', 'sped ecd', 'sped ecf']],
   'l-f': [['fiscal', 'importação'], []],
+  'm': [['fiscal'], ['dasm-simei']], 
+  's-m': [['fiscal', 'contabil', 'reinf', 'sintegra', 'parcelamento', 'destda', 'importação'],['dirf', 'defis', 'sped ecd']],
+  's-f': [['fiscal', 'reinf', 'importação'], []],
   'p-m': [['fiscal', 'contabil', 'reinf', 'sped fiscal', 'sped contrib', 'dctf', 'parcelamento', 'importação'], ['dirf', 'sped ecd', 'sped ecf']],
   'p-f': [['fiscal', 'importação'], []],
   't': [['dctf', 'reinf', 'contabil', 'importação'],['sped ecd', 'sped ecf', 'dirf']],

@@ -23,21 +23,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-+*z+nx6@kjol+s@5+cefd&vr3svhgfq4660ceth8c=%$&&dr%$'
-DEBUG = True
-ALLOWED_HOSTS = []
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
-SECRET_KEY = os.environ.get('SECRET_KEY')
-DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(" ")
-database_url = os.environ.get('DATABASE_URL')
-DATABASES['default'] = dj_database_url.parse("postgres://controle_db_user:LK0b8BqXqDkC9E5szW6dFCD4rEd9baeS@dpg-co65ouf109ks73dosl90-a.oregon-postgres.render.com/controle_db")
+
+try:
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(" ")
+    database_url = os.environ.get('DATABASE_URL')
+except AttributeError:
+    SECRET_KEY = 'django-insecure-+*z+nx6@kjol+s@5+cefd&vr3svhgfq4660ceth8c=%$&&dr%$'
+    DEBUG = True
+    ALLOWED_HOSTS = []
+    database_url = 'postgres://controle_db_user:LK0b8BqXqDkC9E5szW6dFCD4rEd9baeS@dpg-co65ouf109ks73dosl90-a.oregon-postgres.render.com/controle_db'
+
+
 
 
 # Application definition
@@ -88,6 +87,14 @@ WSGI_APPLICATION = 'controle_mca.wsgi.application'
 
 
 # Database
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+DATABASES['default'] = dj_database_url.parse(database_url)
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 

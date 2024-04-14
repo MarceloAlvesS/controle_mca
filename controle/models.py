@@ -4,13 +4,15 @@ from django.contrib.auth.models import User
 
 class Empresa(models.Model):
     choice_enquadramento = [('', '____________'),
-                            ('s-m', 'Simples Matriz'),
-                            ('s-f', 'Simples Filial'),
                             ('l-m', 'Lucro Real Matriz'),
                             ('l-f', 'Lucro Real Filial'),
+                            ('m', 'Mei'),
                             ('p-m', 'Presumido Matriz'),
                             ('p-f', 'Presumido Filial'),
-                            ('t', 'Terceiro Setor')]
+                            ('s-m', 'Simples Matriz'),
+                            ('s-f', 'Simples Filial'),
+                            ('t', 'Terceiro Setor'),
+                            ]
     usuarios = models.ManyToManyField(User,  related_name='empresas', through='Competencia')
     nome = models.CharField(max_length=17, blank=False,  null=False, unique=True)
     enquadramento = models.CharField(max_length=3, choices=choice_enquadramento, default='', blank=True)

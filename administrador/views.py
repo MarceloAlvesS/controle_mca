@@ -23,9 +23,7 @@ def empresas(request):
     match request.method:
         case 'POST':
             remove_object_model(Empresa, 'nome', request.POST.getlist('caixas_selecionadas'))
-    match request.method:
-        case 'POST':
-            print(request.POST.get('caixas_selecionadas'))
+
     context = {}
     context['tipo'] = {'plural':'empresas'}
     context['conteudos'] = Empresa.objects.all().order_by('nome')
@@ -77,6 +75,8 @@ def empresa(request, empresa_nome):
     context['tipo'] = {'plural': 'empresas_admin', 'metodo':'editar'}
     context['tituloForm'] = tituloForm
     context['competenciaForm_list'] = competenciasForm_list
+    if empresa.nome != empresa_nome:
+        return redirect('empresa_admin', empresa.nome)
     return render(request, 'tipo_admin.html', context=context)
 
 
@@ -208,7 +208,7 @@ def contabil(request):
         case 'POST':
             remove_object_model(User, 'username', request.POST.getlist('caixas_selecionadas'))
     context = {}
-    context['conteudos'] = User.objects.all().order_by('username').exclude(username='Marceloalves')
+    context['conteudos'] = User.objects.all().order_by('-groups', 'username').exclude(username='Admin')
     context['tipo'] = {'plural':'contabil'}
     context['link'] = 'home'
     return render(request, 'tipos_admin.html', context)

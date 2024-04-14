@@ -123,6 +123,8 @@ def editar_empresa(request, client, empresa_nome):
     context['tipo'] = {'plural': 'empresas', 'metodo':'editar'}
     context['tituloForm'] = tituloForm
     context['competenciaForm_list'] = competenciasForm_list
+    if empresa.nome != empresa_nome:
+        return redirect('empresa', client, empresa.nome)
     return render(request, 'tipo.html', context=context)
 
 
