@@ -10,23 +10,23 @@
 </head>
 <body>
     <header id="secundario">
-        <a href="{% url 'criar_empresa' client %}">+</a>
+        <a href="{% url 'criar_cliente' client %}">+</a>
         <div id="titulo">
-            <h1>EMPRESAS</h1>
+            <h1>CLIENTES</h1>
         </div>
         <a href="{% url 'home' client %}" id="fechar"><img src="{% static 'image/fechar.png' %}" alt=""></a>
     </header>
     <div id="caminho">
-        {% for empresa in empresas %}
-        <a href="{% url 'editar_empresa' client empresa %}" class="caminho">{{empresa}}</a>
+        {% for cliente in clientes %}
+        <a href="{% url 'editar_cliente' client cliente %}" class="caminho">{{cliente}}</a>
         {% endfor %}
     </div>
     <footer>
         {% if anterior %}
-        <a href="{% url 'empresas' client pagina|add:-1 %}"><img src="{% static 'image/ir.png' %}" alt="anterior" id="anterior"></a>
+        <a href="{% url 'clientes' client pagina|add:-1 %}"><img src="{% static 'image/ir.png' %}" alt="anterior" id="anterior"></a>
         {% endif %}
         {% if sucessor %}
-        <a href="{% url 'empresas' client pagina|add:+1 %}"><img src="{% static 'image/ir.png' %}" alt="sucessor" id="sucessor"></a>
+        <a href="{% url 'clientes' client pagina|add:+1 %}"><img src="{% static 'image/ir.png' %}" alt="sucessor" id="sucessor"></a>
         {% endif %}
     </footer>
 </body>

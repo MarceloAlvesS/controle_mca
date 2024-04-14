@@ -18,7 +18,7 @@
         </header>
 
         <div id="utilidade_geral">
-            {% if tipo.plural == 'empresas' %}
+            {% if tipo.plural == 'clientes' %}
                 <div>
                     <h3 id="tipo">Tributação</h3>
                     {{tituloForm.enquadramento}}
@@ -32,11 +32,11 @@
         </div>
         
         <div id="tabelas"> 
-            {% if tipo.plural == 'empresas' or tipo.formato == 'A' or tipo.metodo == 'criar' %}
+            {% if tipo.plural == 'clientes' or tipo.formato == 'A' or tipo.metodo == 'criar' %}
             <div id="anual" class="tabela">
                 {% include 'tabela/utilidade.html' %}
                 <div class="linha thead">
-                    <div class="cabecalho tipo">{%if tipo.plural == 'empresas'%}Obrigações{%elif tipo.plural == 'obrigacoes'%}Empresas{%endif%}</div>
+                    <div class="cabecalho tipo">{%if tipo.plural == 'clientes'%}Obrigações{%elif tipo.plural == 'obrigacoes'%}Clientes{%endif%}</div>
                     <div class="cabecalho">ANUAL</div>
                     <div class="cabecalho obs">OBS</div>
                 </div>
@@ -47,11 +47,11 @@
                 {% endif %}
             </div>
             {% endif %}
-            {% if tipo.plural == 'empresas' or tipo.formato == 'M' or tipo.metodo == 'criar' %}
+            {% if tipo.plural == 'clientes' or tipo.formato == 'M' or tipo.metodo == 'criar' %}
             <div id="mensal" class="tabela">
                 {% include 'tabela/utilidade.html' %}
                 <div class="linha thead">
-                    <div class="cabecalho tipo">{%if tipo.plural == 'empresas'%}Obrigações{%elif tipo.plural == 'obrigacoes'%}Empresas{%endif%}</div>
+                    <div class="cabecalho tipo">{%if tipo.plural == 'clientes'%}Obrigações{%elif tipo.plural == 'obrigacoes'%}Clientes{%endif%}</div>
                     <div class="cabecalho">JAN</div>
                     <div class="cabecalho">FEV</div>
                     <div class="cabecalho">MAR</div>

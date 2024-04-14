@@ -16,11 +16,11 @@ def home(request, client):
 
 @login_required(login_url=settings.LOGIN_URL)
 @check_permission(permission='ver_funcionarios')
-def empresas(request, client, pagina=0):
+def clientes(request, client, pagina=0):
     context = {'client': client}
 
     if pagina == 0:
-        return redirect('empresas', client, 1)
+        return redirect('clientes', client, 1)
 
     usuario = get_user_from(client)
     empresas = usuario.empresas.distinct().order_by('nome')
@@ -31,9 +31,9 @@ def empresas(request, client, pagina=0):
         'anterior': selecionados['anterior'],
         'sucessor': selecionados['sucesso'],
         'pagina': pagina,
-        'tipo': {'singular': 'empresa',
-                 'plural': 'empresas',
-                 'correcao': 'empresas'}
+        'tipo': {'singular': 'cliente',
+                 'plural': 'clientes',
+                 'correcao': 'clientes'}
     })
 
     return render(request, 'tipos.html', context=context)
@@ -41,7 +41,7 @@ def empresas(request, client, pagina=0):
 
 @login_required(login_url=settings.LOGIN_URL)
 @check_permission(permission='ver_funcionarios')
-def criar_empresa(request, client):
+def criar_cliente(request, client):
     context = {'client': client}
     usuario = get_user_from(client)
 
@@ -67,12 +67,12 @@ def criar_empresa(request, client):
                 for form in competenciasForm:
                     competencia_register(formulario=form['competenciaForm'], model=Obrigacao, formato=form['formato'], empresa=empresa, usuario=usuario)
 
-                return redirect('editar_empresa', client, empresa)
+                return redirect('editar_cliente', client, empresa)
             else:
                 print(tituloForm.errors)
             
     competenciaForm_list = [[formularios['competencia_mensal']()],[formularios['competencia_anual']()]]
-    context['tipo'] = {'plural':'empresas', 'metodo': 'criar'}
+    context['tipo'] = {'plural':'clientes', 'metodo': 'criar'}
     context['tituloForm'] = tituloForm
     context['competenciaForm_list'] = competenciaForm_list
     return render(request, 'tipo.html', context=context)
@@ -80,17 +80,17 @@ def criar_empresa(request, client):
 
 @login_required(login_url=settings.LOGIN_URL)
 @check_permission(permission='ver_funcionarios')
-def editar_empresa(request, client, empresa_nome):
-    if not empresa_nome.isupper():
-        return redirect('editar_empresa', client, empresa_nome.upper())
+def editar_cliente(request, client, cliente_nome):
+    if not cliente_nome.isupper():
+        return redirect('editar_cliente', client, cliente_nome.upper())
     
     context = {'client': client}
     usuario = get_user_from(client)
     
     try:
-        empresa = usuario.empresas.distinct().get(nome=empresa_nome)
+        empresa = usuario.empresas.distinct().get(nome=cliente_nome)
     except ObjectDoesNotExist:
-        return redirect('empresas', client, 1)
+        return redirect('clientes', client, 1)
 
     match request.method:
         case 'GET':
@@ -120,11 +120,11 @@ def editar_empresa(request, client, empresa_nome):
         if not formato:
             competenciasForm_list[i].append(formato_competenciasForm[i]())
 
-    context['tipo'] = {'plural': 'empresas', 'metodo':'editar'}
+    context['tipo'] = {'plural': 'clientes', 'metodo':'editar'}
     context['tituloForm'] = tituloForm
     context['competenciaForm_list'] = competenciasForm_list
-    if empresa.nome != empresa_nome:
-        return redirect('empresa', client, empresa.nome)
+    if empresa.nome != cliente_nome:
+        return redirect('cliente', client, empresa.nome)
     return render(request, 'tipo.html', context=context)
 
 

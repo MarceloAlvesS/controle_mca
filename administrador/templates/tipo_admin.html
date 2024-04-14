@@ -19,7 +19,7 @@
         </header>
 
         <div id="utilidade_geral">
-            {% if tipo.plural == 'empresas_admin' %}
+            {% if tipo.plural == 'clientes_admin' %}
                 <div>
                     <h3 id="tipo">Tributação</h3>
                     {{tituloForm.enquadramento}}
@@ -31,7 +31,7 @@
                 </div>
             {% endif %}
         <div id="tabelas">
-            {% if tipo.plural == 'empresas_admin' or tipo.formato == 'A' or tipo.metodo == 'criar' %}
+            {% if tipo.plural == 'clientes_admin' or tipo.formato == 'A' or tipo.metodo == 'criar' %}
             <div id="anual" class="tabela">
                 {% include 'tabela/utilidade.html' %}
 
@@ -47,7 +47,7 @@
                 {% endif %}
             </div>
             {% endif %}  
-            {% if tipo.plural == 'empresas_admin' or tipo.formato == 'M' or tipo.metodo == 'criar' %}
+            {% if tipo.plural == 'clientes_admin' or tipo.formato == 'M' or tipo.metodo == 'criar' %}
             <div id="mensal" class="tabela">
                 {% include 'tabela/utilidade.html' %}
                 <div class="linha thead">

@@ -19,28 +19,28 @@ def home(request):
 
 @has_role_decorator('administrador')
 @login_required(login_url=settings.LOGIN_URL)
-def empresas(request):
+def clientes(request):
     match request.method:
         case 'POST':
             remove_object_model(Empresa, 'nome', request.POST.getlist('caixas_selecionadas'))
 
     context = {}
-    context['tipo'] = {'plural':'empresas'}
+    context['tipo'] = {'plural':'clientes'}
     context['conteudos'] = Empresa.objects.all().order_by('nome')
-    context['link'] = 'empresa_admin'
+    context['link'] = 'cliente_admin'
     return render(request, 'tipos_admin.html', context)
 
 
 @has_role_decorator('administrador')
 @login_required(login_url=settings.LOGIN_URL)
-def empresa(request, empresa_nome):
-    if not empresa_nome.isupper():
-        return redirect('empresa_admin', empresa_nome.upper())
+def cliente(request, cliente_nome):
+    if not cliente_nome.isupper():
+        return redirect('cliente_admin', cliente_nome.upper())
     
     context = {}
     
     try:
-        empresa = Empresa.objects.get(nome=empresa_nome)
+        empresa = Empresa.objects.get(nome=cliente_nome)
     except ObjectDoesNotExist:
         return redirect('empresas', 1)
 
@@ -72,11 +72,11 @@ def empresa(request, empresa_nome):
         if not formato:
             competenciasForm_list[i].append(formato_competenciasForm[i]())
 
-    context['tipo'] = {'plural': 'empresas_admin', 'metodo':'editar'}
+    context['tipo'] = {'plural': 'clientes_admin', 'metodo':'editar'}
     context['tituloForm'] = tituloForm
     context['competenciaForm_list'] = competenciasForm_list
-    if empresa.nome != empresa_nome:
-        return redirect('empresa_admin', empresa.nome)
+    if empresa.nome != cliente_nome:
+        return redirect('cliente_admin', empresa.nome)
     return render(request, 'tipo_admin.html', context=context)
 
 

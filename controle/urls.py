@@ -21,11 +21,11 @@ from . import views
 urlpatterns = [
     
     path('', views.home, name='home'),
-    path('empresas/', views.empresas),
-    path('empresas/', views.empresas),
-    path('empresas/<int:pagina>/', views.empresas, name='empresas'),
-    path('empresas/criar/', views.criar_empresa, name='criar_empresa'),
-    path('empresas/<str:empresa_nome>/', views.editar_empresa, name='editar_empresa'),
+    path('clientes/', views.clientes),
+    path('clientes/', views.clientes),
+    path('clientes/<int:pagina>/', views.clientes, name='clientes'),
+    path('clientes/criar/', views.criar_cliente, name='criar_cliente'),
+    path('clientes/<str:cliente_nome>/', views.editar_cliente, name='editar_cliente'),
     path('obrigacoes/', views.obrigacoes),
     path('obrigacoes/<int:pagina>/', views.obrigacoes, name='obrigacoes'),
     path('obrigacoes/criar/', views.criar_obrigacao, name='criar_obrigacao'),

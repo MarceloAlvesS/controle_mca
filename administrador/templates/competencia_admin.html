@@ -20,17 +20,17 @@
         <table id="mensal">
             <thead class="obrigacoes">
                 <tr>
-                    <th>{{'empresas'|upper  }}</th>
+                    <th>{{'clientes'|upper  }}</th>
                 {% for obrigacao in conteudo.obrigacoes %}
                     <th class="conteudo">{{obrigacao}}</th>
                 {% endfor %}
                 </tr>
             </thead>
             <tbody>
-                {% for empresa, valores_competencia in conteudo.tabela.items %}
+                {% for cliente, valores_competencia in conteudo.tabela.items %}
                 <tr>
                     <td>
-                        {{empresa}}
+                        {{cliente}}
                     </td>
                     {% for valor_competencia in valores_competencia %}
                     {% if valor_competencia == '-' %}
