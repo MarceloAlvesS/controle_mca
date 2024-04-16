@@ -55,5 +55,5 @@ class Competencia(models.Model):
     obs = models.TextField(blank=True)
 
     def __str__(self):
-        return f'{self.empresa}: {self.obrigacao}'
+        return f'{self.usuario} - {self.empresa}: {self.obrigacao}'
     
