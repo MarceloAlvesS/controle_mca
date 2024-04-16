@@ -34,14 +34,14 @@ class Obrigacao(models.Model):
         return self.nome
     
 class Competencia(models.Model):
-    meses = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
+    meses = ['janeiro', 'fevereiro', 'marco', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
     usuario = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='competencias', null=True, blank=True)
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='competencias')
     obrigacao = models.ForeignKey(Obrigacao, on_delete=models.CASCADE, related_name='competencias')
 
     janeiro = models.CharField(max_length=5, blank=True, null=True)
     fevereiro = models.CharField(max_length=5, blank=True, null=True)
-    março = models.CharField(max_length=5, blank=True, null=True)
+    marco = models.CharField(max_length=5, blank=True, null=True)
     abril = models.CharField(max_length=5, blank=True, null=True)
     maio = models.CharField(max_length=5, blank=True, null=True)
     junho = models.CharField(max_length=5, blank=True, null=True)

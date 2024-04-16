@@ -61,7 +61,7 @@ def criar_cliente(request, client):
                 empresa = model_register(Empresa, **tituloForm.cleaned_data)
 
                 competencias_anuais = get_competencias(POST=request.POST, names=['A-tipo', 'A-anual', 'A-obs'])
-                competencias_mensais = get_competencias(POST=request.POST, names=['M-tipo', 'M-janeiro', 'M-fevereiro', 'M-março', 'M-abril', 'M-maio', 'M-junho', 'M-julho', 'M-agosto', 'M-setembro', 'M-outubro', 'M-novembro', 'M-dezembro', 'M-obs'])
+                competencias_mensais = get_competencias(POST=request.POST, names=['M-tipo', 'M-janeiro', 'M-fevereiro', 'M-marco', 'M-abril', 'M-maio', 'M-junho', 'M-julho', 'M-agosto', 'M-setembro', 'M-outubro', 'M-novembro', 'M-dezembro', 'M-obs'])
 
                 competenciasForm = get_forms_from_competencias(competencias_anuais=competencias_anuais, competencias_mensais=competencias_mensais)
                 for form in competenciasForm:
@@ -102,7 +102,7 @@ def editar_cliente(request, client, cliente_nome):
                 empresa = model_register(Empresa, **tituloForm.cleaned_data)
 
                 competencias_anuais = get_competencias(POST=request.POST, names=['A-tipo', 'A-anual', 'A-obs'])
-                competencias_mensais = get_competencias(POST=request.POST, names=['M-tipo', 'M-janeiro', 'M-fevereiro', 'M-março', 'M-abril', 'M-maio', 'M-junho', 'M-julho', 'M-agosto', 'M-setembro', 'M-outubro', 'M-novembro', 'M-dezembro', 'M-obs'])
+                competencias_mensais = get_competencias(POST=request.POST, names=['M-tipo', 'M-janeiro', 'M-fevereiro', 'M-marco', 'M-abril', 'M-maio', 'M-junho', 'M-julho', 'M-agosto', 'M-setembro', 'M-outubro', 'M-novembro', 'M-dezembro', 'M-obs'])
                 deleted_competencias(empresa, competencias_anuais+competencias_mensais, usuario).delete()
                 competenciasForm = get_forms_from_competencias(competencias_anuais=competencias_anuais, competencias_mensais=competencias_mensais)
                 for form in competenciasForm:
@@ -171,7 +171,7 @@ def criar_obrigacao(request, client):
             if tituloForm.is_valid():
                 obrigacao = model_register(Obrigacao, **tituloForm.cleaned_data)
                 
-                competencias = get_competencias(POST=request.POST, names=['M-tipo', 'M-janeiro', 'M-fevereiro', 'M-março', 'M-abril', 'M-maio', 'M-junho', 'M-julho', 'M-agosto', 'M-setembro', 'M-outubro', 'M-novembro', 'M-dezembro', 'M-obs'] if obrigacao.formato == 'M' else ['A-tipo', 'A-anual', 'A-obs'])
+                competencias = get_competencias(POST=request.POST, names=['M-tipo', 'M-janeiro', 'M-fevereiro', 'M-marco', 'M-abril', 'M-maio', 'M-junho', 'M-julho', 'M-agosto', 'M-setembro', 'M-outubro', 'M-novembro', 'M-dezembro', 'M-obs'] if obrigacao.formato == 'M' else ['A-tipo', 'A-anual', 'A-obs'])
 
                 competenciasForm = get_forms_from_competencias(competencias_anuais=competencias) if obrigacao.formato == 'A' else get_forms_from_competencias(competencias_mensais=competencias)
                 for form in competenciasForm:
@@ -219,7 +219,7 @@ def editar_obrigacao(request, client, obrigacao_nome):
             if tituloForm.is_valid():
                 obrigacao.save()
                 
-                competencias = get_competencias(POST=request.POST, names=['M-tipo', 'M-janeiro', 'M-fevereiro', 'M-março', 'M-abril', 'M-maio', 'M-junho', 'M-julho', 'M-agosto', 'M-setembro', 'M-outubro', 'M-novembro', 'M-dezembro', 'M-obs'] if formato_antes == 'M' else ['A-tipo', 'A-anual', 'A-obs'])
+                competencias = get_competencias(POST=request.POST, names=['M-tipo', 'M-janeiro', 'M-fevereiro', 'M-marco', 'M-abril', 'M-maio', 'M-junho', 'M-julho', 'M-agosto', 'M-setembro', 'M-outubro', 'M-novembro', 'M-dezembro', 'M-obs'] if formato_antes == 'M' else ['A-tipo', 'A-anual', 'A-obs'])
 
                 # Deletando competencias não encontradas no formulario
                 deleted_competencias(obrigacao, competencias, usuario).delete()

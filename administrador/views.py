@@ -54,7 +54,7 @@ def cliente(request, cliente_nome):
                 empresa = model_register(Empresa, **tituloForm.cleaned_data)
 
                 competencias_anuais = get_competencias(POST=request.POST, names=['A-tipo', 'A-anual', 'A-obs'])
-                competencias_mensais = get_competencias(POST=request.POST, names=['M-tipo', 'M-janeiro', 'M-fevereiro', 'M-março', 'M-abril', 'M-maio', 'M-junho', 'M-julho', 'M-agosto', 'M-setembro', 'M-outubro', 'M-novembro', 'M-dezembro', 'M-obs'])
+                competencias_mensais = get_competencias(POST=request.POST, names=['M-tipo', 'M-janeiro', 'M-fevereiro', 'M-marco', 'M-abril', 'M-maio', 'M-junho', 'M-julho', 'M-agosto', 'M-setembro', 'M-outubro', 'M-novembro', 'M-dezembro', 'M-obs'])
                 deleted_competencias(empresa, competencias_anuais+competencias_mensais).delete()
                 competenciasForm = get_forms_from_competencias(competencias_anuais=competencias_anuais, competencias_mensais=competencias_mensais)
                 for form in competenciasForm:
