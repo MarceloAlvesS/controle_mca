@@ -32,9 +32,11 @@ def login(request):
             user = authenticate(username=username, password=password)
             login_django(request, user)
 
-            if user:
-                sessions = Session.objects.filter(expire_date__gt=timezone.now())
-                sessions.exclude(session_key=request.session.session_key).delete()
+            """ ** deslogava todos os usuarios ao fazer o login
+            # if user:
+            #     sessions = Session.objects.filter(expire_date__gt=timezone.now())
+            #     print(sessions)
+            #     # sessions.exclude(session_key=request.session.session_key).delete() """
 
             if has_permission(request.user, 'ver_area_administrativa'):
                 return redirect('home_admin')
