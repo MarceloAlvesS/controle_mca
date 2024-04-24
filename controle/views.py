@@ -124,7 +124,7 @@ def editar_cliente(request, client, cliente_nome):
     context['tituloForm'] = tituloForm
     context['competenciaForm_list'] = competenciasForm_list
     if empresa.nome != cliente_nome:
-        return redirect('cliente', client, empresa.nome)
+        return redirect('editar_cliente', client, empresa.nome)
     return render(request, 'tipo.html', context=context)
 
 

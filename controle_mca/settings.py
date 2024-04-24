@@ -150,3 +150,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ROLEPERMISSIONS_MODULE = 'controle_mca.roles'
 
 USER_LIMIT = 9
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240

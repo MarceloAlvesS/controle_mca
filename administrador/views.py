@@ -42,7 +42,7 @@ def cliente(request, cliente_nome):
     try:
         empresa = Empresa.objects.get(nome=cliente_nome)
     except ObjectDoesNotExist:
-        return redirect('empresas', 1)
+        return redirect('clientes_admin')
 
     match request.method:
         case 'GET':
@@ -158,7 +158,7 @@ def obrigacao(request, obrigacao_nome):
     try:
         obrigacao = Obrigacao.objects.get(nome=obrigacao_nome)
     except ObjectDoesNotExist:
-        return redirect('obrigacoes', 1)
+        return redirect('obrigacoes_admin', 1)
 
 
     # Casos para method GET e POST

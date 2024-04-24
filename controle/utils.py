@@ -52,6 +52,7 @@ def get_values_from_keys(dicionario, *keys):
 def get_competencias(POST, names:list):
     returned = []
     post = {name:POST.getlist(name) for name in names}
+    print(post)
     for index, _ in enumerate(post[names[0]]):
         competencia = {}
         for name in names:
