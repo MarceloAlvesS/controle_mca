@@ -6,13 +6,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/geral.css' %}">
     <link rel="stylesheet" href="{% static 'css/terciario.css' %}">
     <title>Controle MCA</title>
     </head>
     <body>
         <form method="post" id="formulario"> {% csrf_token %}
         <header>
-            <a href="{% url tipo.plural client 1 %}" id="voltar"><img src="{% static 'image/ir.png'%}" alt="voltar"></a>
+            <a href="{% url tipo.plural client pagina %}" id="voltar"><img src="{% static 'image/ir.png'%}" alt="voltar"></a>
             {{tituloForm.nome}}
             <a href="{% url 'home' client %}" id="fechar"><img src="{% static 'image/fechar.png'%}" alt="voltar"></a>
         </header>

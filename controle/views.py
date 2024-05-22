@@ -75,6 +75,7 @@ def criar_cliente(request, client):
     context['tipo'] = {'plural':'clientes', 'metodo': 'criar'}
     context['tituloForm'] = tituloForm
     context['competenciaForm_list'] = competenciaForm_list
+    context['pagina'] = 1
     return render(request, 'tipo.html', context=context)
             
 
@@ -91,7 +92,10 @@ def editar_cliente(request, client, cliente_nome):
         empresa = usuario.empresas.distinct().get(nome=cliente_nome)
     except ObjectDoesNotExist:
         return redirect('clientes', client, 1)
-
+    
+    pagina = int(list(usuario.empresas.distinct().order_by('nome')).index(empresa)/12)+1
+    print(list(usuario.empresas.distinct().order_by('nome')).index(empresa))
+    
     match request.method:
         case 'GET':
             tituloForm = create_dynamic_titulo_form('Empresa', ['nome', 'enquadramento'])(instance=empresa)
@@ -123,6 +127,7 @@ def editar_cliente(request, client, cliente_nome):
     context['tipo'] = {'plural': 'clientes', 'metodo':'editar'}
     context['tituloForm'] = tituloForm
     context['competenciaForm_list'] = competenciasForm_list
+    context['pagina'] = pagina
     if empresa.nome != cliente_nome:
         return redirect('editar_cliente', client, empresa.nome)
     return render(request, 'tipo.html', context=context)

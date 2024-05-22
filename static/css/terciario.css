@@ -1,7 +1,6 @@
 body {
     height: 100vh;
     margin: 0px;
-    background-color: #8DC7E0;
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -17,7 +16,7 @@ header {
     display: flex;
     align-items: flex-start;
     padding-bottom: 30px;
-    background-color: #8DC7E0;
+    background-color: #1b7381;
 }
 
 .titulo {

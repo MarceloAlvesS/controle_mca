@@ -1,7 +1,6 @@
 body {
     height: 100vh;
     margin: 0px;
-    background-color: #8DC7E0;
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -44,15 +43,15 @@ a.caminho {
     text-decoration: none;
     color: black;
     font-weight: bold;
-    font-size: clamp(1em, 2.5em, 1em + 10vh);
+    font-size: clamp(1em, 2.2em, 1em + 10vh);
     border-radius: 5px;
-    width: 20vw;
+    width: 22vw;
     height: 20vh;
     display: flex;
     flex-wrap: wrap;
     align-content: center;
     justify-content: center;
-    word-break: break-all;
+    word-break: break-word;
 }
 
 footer {
