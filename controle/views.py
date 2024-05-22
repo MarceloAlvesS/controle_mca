@@ -138,7 +138,7 @@ def editar_cliente(request, client, cliente_nome):
 def obrigacoes(request, client, pagina=0):
     context = {'client': client}
     if pagina == 0:
-        return redirect('obrigacoes', 1)
+        return redirect('obrigacoes', client, 1)
     
     usuario = get_user_from(client)
     obrigacoes = usuario.obrigacoes.distinct().order_by('nome')
@@ -190,6 +190,7 @@ def criar_obrigacao(request, client):
     context['tipo'] = {'plural': 'obrigacoes', 'metodo':'criar'}
     context['tituloForm'] = tituloForm
     context['competenciaForm_list'] = competenciaForm_list
+    context['pagina'] = 1
     return render(request, 'tipo.html', context=context)
 
 
@@ -211,6 +212,7 @@ def editar_obrigacao(request, client, obrigacao_nome):
     except ObjectDoesNotExist:
         return redirect('obrigacoes', client, 1)
 
+    pagina = int(list(usuario.obrigacoes.distinct().order_by('nome')).index(obrigacao)/16) + 1
 
     # Casos para method GET e POST
     match request.method:
@@ -246,7 +248,7 @@ def editar_obrigacao(request, client, obrigacao_nome):
 
     context['tipo'] = {'plural': 'obrigacoes', 'metodo':'editar', 'formato': obrigacao.formato}
     context['tituloForm'] = tituloForm
-
+    context['pagina'] = pagina
     context['competenciaForm_list'] = competenciasForm_list
     return render(request, 'tipo.html', context=context)
 
