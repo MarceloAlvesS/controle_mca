@@ -97,14 +97,14 @@ document.querySelectorAll('.delete').forEach(element => {
 
 const enquadramentos = {
   '': [[],[]],
-  'l-m': [['fiscal', 'contabil', 'sped fiscal', 'dctf', 'parcelamento', 'importação'], ['dirf', 'sped ecd', 'sped ecf']],
+  'l-m': [['fiscal', 'contábil', 'sped fiscal', 'dctf', 'parcelamento', 'importação'], ['dirf', 'sped ecd', 'sped ecf']],
   'l-f': [['fiscal', 'importação'], []],
   'm': [['fiscal'], ['dasm-simei']], 
-  's-m': [['fiscal', 'contabil', 'reinf', 'sintegra', 'parcelamento', 'destda', 'importação'],['dirf', 'defis', 'sped ecd']],
+  's-m': [['fiscal', 'contábil', 'reinf', 'sintegra', 'parcelamento', 'destda', 'importação'],['dirf', 'defis', 'sped ecd']],
   's-f': [['fiscal', 'reinf', 'importação'], []],
-  'p-m': [['fiscal', 'contabil', 'reinf', 'sped fiscal', 'sped contrib', 'dctf', 'parcelamento', 'importação'], ['dirf', 'sped ecd', 'sped ecf']],
+  'p-m': [['fiscal', 'contábil', 'reinf', 'sped fiscal', 'sped contrib', 'dctf', 'parcelamento', 'importação'], ['dirf', 'sped ecd', 'sped ecf']],
   'p-f': [['fiscal', 'importação'], []],
-  't': [['dctf', 'reinf', 'contabil', 'importação'],['sped ecd', 'sped ecf', 'dirf']],
+  't': [['dctf', 'reinf', 'contábil', 'importação'],['sped ecd', 'sped ecf', 'dirf']],
 }
 
 
