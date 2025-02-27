@@ -37,8 +37,6 @@ except AttributeError:
     ALLOWED_HOSTS = []
     database_url = 'postgres://controle_db_user:LK0b8BqXqDkC9E5szW6dFCD4rEd9baeS@dpg-co65ouf109ks73dosl90-a.oregon-postgres.render.com/controle_db'
 
-DEBUG = True
-
 
 # Application definition
 

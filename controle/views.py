@@ -528,7 +528,7 @@ def duplicar_dados(request, client: str) -> HttpResponse:
                     competencias = Competencia.objects.filter(ano = de_ano, usuario = usuario)
                 _ = list(map(duplicate_competencia, competencias))
                 context['sucess_list'].append('Datos transferidos do ano ' +
-                                              f'{de_ano} para ano {para_ano}' +
+                                              f'{de_ano} para ano {para_ano} ' +
                                               'com sucesso')
 
     context['form'] = form
