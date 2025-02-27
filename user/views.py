@@ -8,8 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .forms import *
 from django.conf import settings
-from django.contrib.sessions.models import Session
-from django.utils import timezone
+from django.http import HttpResponse
 
 @login_required(login_url=settings.LOGIN_URL)
 def usuario(request):

@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/geral.css' %}">
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
-    <title>Controle MCA</title>
+    {% include 'title.html' %}
 </head>
 <body>
     {% if request.user|can:'ver_area_administrativa' %}
@@ -21,8 +21,8 @@
         <div id="form">
             <h1>{{request.user.username}}</h1> 
             {% if mensagem_erro %}<p id="erro">(!) {{mensagem_erro}}</p> {% endif %}       
-            <a href="{% url 'nome' %}" class="mudar">Editar nome</a>
-            <a href="{% url 'senha' %}" class="mudar">Alterar senha</a>
+            <a href="{% url 'nome' %}" class="botao">Editar nome</a>
+            <a href="{% url 'senha' %}" class="botao">Alterar senha</a>
         </div>
         <a href="{% url 'logout' %}">
             <footer id="logout">

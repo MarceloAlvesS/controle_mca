@@ -19,8 +19,10 @@ def difference_from(dictionary, differences:list):
         dictionary.pop(difference, '')
     return dictionary
 
+
 def get_user_from(client):
     return User.objects.filter(username=client).first()
+
 
 def user_verificatin(client, user):
     return client == user
@@ -48,6 +50,7 @@ def get_tipos(empresas, page, quant):
 def get_values_from_keys(dicionario, *keys):
     returned = {key: dicionario.get(key) for key in keys}
     return returned
+
 
 def get_competencias(POST, names:list):
     returned = []
@@ -81,18 +84,16 @@ def get_forms_from_competencias(competencias_anuais=[], competencias_mensais=[])
     return returned
 
 
-def deleted_competencias(model, competencias_post, usuario=None):
+def deleted_competencias(model, competencias_post, ano, usuario=None):
     selecionador = {
         Empresa: 'obrigacao__nome',
         Obrigacao: 'empresa__nome'
     }
     competencias_post_nomes = set((post[list(post.keys())[0]] for post in competencias_post))
     returned = model.competencias.exclude(**{selecionador[type(model)]+'__in':competencias_post_nomes})
-
+    returned = returned.filter(ano=ano)
     # Caso seja dado como parâmetro o usuario será filtrado das competencias faltantes apenas aquelas que há o usuario dado
     if usuario:
         returned = returned.filter(usuario=usuario)
 
     return returned
-
-

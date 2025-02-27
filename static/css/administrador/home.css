@@ -4,45 +4,88 @@ body {
   min-height: 100vh;
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
+
+  header {
+    text-align: center;
+
+    a#user {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      background-color: #808080;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid black;
+      color: black;
+      text-decoration: none;
+    }
+    a#user:hover {
+      text-decoration: underline;
+      color: rgb(165, 0, 0);
+    }
+    h1 {
+      font-size: 3em;
+    }
+  }
+  div#principal {
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+
+    a#home {
+      grid-column-start: 1;
+      grid-column-end: 3;
+      width: fit-content;
+      justify-self: center;
+    }
+    a.conteudo {
+      text-align: center;
+      text-decoration: none;
+      color: black;
+      padding: 25px;
+      background-color: gray;
+      border-radius: 5px;
+      font-size: 3em;
+      margin: 20px;
+    }
+    a.conteudo:hover {
+      border: 1px solid black;
+      padding: 24px;
+    }
+  }
+  footer {
+    margin: 5px;
+  
+    a {
+        display: block;
+        background-color: #808080;
+        padding: 5px;
+        border-radius: 5px;
+        text-decoration: none;
+        color: black;
+        font-weight: bold;
+        font-size: 1.3em;
+        text-align: center ;
+    }
+    a:hover {
+      border: 1px solid black;
+      padding: 4px;
+    }
+  }
 }
 
-header {
-  text-align: center;
-}
 
-#user {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-}
 
-header h1 {
-  font-size: 3em;
-}
 
-#principal {
-  flex-grow: 1;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  align-items: center;
-}
 
-#eu {
-  grid-column-start: 1;
-  grid-column-end: 3;
-  width: fit-content;
-  justify-self: center;
-}
 
-.conteudo {
-  text-align: center;
-  text-decoration: none;
-  color: black;
-  padding: 25px;
-  background-color: gray;
-  border: black 1px solid;
-  border-radius: 5px;
-  font-size: 3em;
-  margin: 20px;
-}
+
+
+
+
+
+
+
+
 

@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/geral.css' %}">
     <link rel="stylesheet" href="{% static 'css/administrador/tipos.css' %}">
-  <title>Controle MCA</title>
+  {% include 'title.html' %}
 </head>
 <body>
   <header>
@@ -33,10 +33,17 @@
           {% if tipo.plural != 'competencias' %}
           <td class='checkbox_coluna'><input type="checkbox" name="caixas_selecionadas"  value="{{conteudo}}"></td>
           {% endif %}
-        <td><a href="{% url link conteudo %}">{{conteudo|title}}</a></td>
+
+        {% if tipo.plural != 'contabil' %}
+        <td><a class="caminho" href="{% url link ano conteudo %}">{{conteudo|title}}</a></td>
+        {% else %}
+        <td><a class="caminho" href="{% url link conteudo %}">{{conteudo|title}}</a></td>
+
+        {% endif %}
+
         {% if tipo.plural == 'clientes' %}
           {% for user in conteudo.usuarios.all.distinct %}
-          <td><a href="{% url 'home' user %}">{{user}}</a></td>
+          <td><a class="caminho" href="{% url 'home' user %}">{{user}}</a></td>
           {% endfor %}
         {% elif tipo.plural == 'contabil' %}
           {% if conteudo.groups.first %}

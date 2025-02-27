@@ -14,6 +14,7 @@ from pathlib import Path
 from django.urls import reverse
 import os
 import dj_database_url
+from datetime import date
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -94,6 +95,7 @@ DATABASES = {
     }
 }
 
+# DATABASES['default'] = dj_database_url.parse('postgresql://controle_teste_user:YLzeqbVJcJjdlRorSzJYWSPIHWWqciWF@dpg-cun60ml2ng1s739tri20-a.oregon-postgres.render.com/controle_teste')
 DATABASES['default'] = dj_database_url.parse(database_url)
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
@@ -151,3 +153,6 @@ ROLEPERMISSIONS_MODULE = 'controle_mca.roles'
 
 USER_LIMIT = 9
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
+
+ANO_INICIAL = 2024
+ANO_ATUAL = date.today().year

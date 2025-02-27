@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{% static 'css/geral.css' %}">
     <link rel="stylesheet" href="{% static 'css/secundario.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle MCA</title>
+    {% include 'title.html' %}
 </head>
 <body>
     <header id="secundario">
@@ -18,7 +18,7 @@
     </header>
     <div id="caminho">
         {% for competencia in competencias %}
-        <a href="{% url 'competencia' client competencia%}" class="caminho">{{competencia}}</a>
+        <a href="{% url 'competencia' client competencia %}" class="caminho">{{competencia}}</a>
         {% endfor %}
     </div>
 </body>

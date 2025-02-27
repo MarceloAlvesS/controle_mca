@@ -8,16 +8,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/competencia.css' %}">
     <link rel="stylesheet" href="{% static 'css/geral.css' %}">
-    <title>Controle MCA</title>
+    {% include 'title.html' %}
 </head>
 <body>
         
         <header>
-            <a href="{% url tipo.0 client %}" id="voltar"><img src="{% static 'image/ir.png'%}" alt="voltar"></a>
+            <a href="{% url tipo.plural client %}" id="voltar"><img src="{% static 'image/ir.png'%}" alt="voltar"></a>
             <h1>{{mes|title}}</h1>
             <a href="{% url 'home' client %}" id="fechar"><img src="{% static 'image/fechar.png'%}" alt="voltar"></a>
         </header>
         
+        <div id="anos">
+            <ul>
+                {% for data in datas %}
+                    {% if data == ano %}
+                        <a href="{% url 'editar_'|add:tipo.singular client  data mes %}">
+                            <li id="atual">{{data}}</li>
+                        </a>
+                    {%else %}
+                        <a href="{% url 'editar_'|add:tipo.singular client  data mes %}">
+                            <li>{{data}}</li>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+
         <table id="mensal">
             <thead class="obrigacoes">
                 <tr>

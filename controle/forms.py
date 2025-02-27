@@ -1,6 +1,8 @@
 from django import forms
 from django.apps import apps
 from .models import *
+from django.conf import settings
+from django.core.exceptions import ValidationError
 
 
 def create_dynamic_titulo_form(model_name, fields=None, exclude=None):
@@ -68,4 +70,13 @@ class CompetenciaAnualForm(forms.ModelForm):
 
     def clean_tipo(self):
         return self.cleaned_data.get('tipo').upper().strip()
-    
+
+
+class DuplicarDadosForm(forms.Form):
+    anos:dict = {str(ano):ano for ano in range(settings.ANO_INICIAL, settings.ANO_ATUAL+1)}
+    de_ano:forms.ChoiceField = forms.ChoiceField(choices=anos, initial=str(settings.ANO_ATUAL-1))
+    para_ano:forms.ChoiceField = forms.ChoiceField(choices=anos, initial=str(settings.ANO_ATUAL))
+
+    def clean(self):
+        if self.cleaned_data['de_ano'] == self.cleaned_data['para_ano']:
+            raise ValidationError('Impossível duplicar dados para o mesmo ano')

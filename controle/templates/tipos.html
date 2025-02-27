@@ -7,19 +7,21 @@
     <link rel="stylesheet" href="{% static 'css/geral.css' %}">
     <link rel="stylesheet" href="{% static 'css/secundario.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% include 'title.html' %}
     {% if tipo.plural != 'clientes' %}
         <style>
-            a.caminho {
-                height: 17vh;
-            }
-            a.anual {
-                grid-column-end: -1;
-                grid-column-start: 1;
-                width: auto;
+            div#caminho {
+                a.caminho {
+                    height: 17vh;
+                }
+                a.anual {
+                    grid-column-end: -1;
+                    grid-column-start: 1;
+                }
             }
         </style>
     {% endif %}
-    <title>Controle MCA</title>
+
 </head>
 <body>
     <header id="secundario">
@@ -33,7 +35,7 @@
     </header>
     <div id="caminho">
         {% for conteudo in conteudos %}
-        <a href="{% url 'editar_'|add:tipo.singular client conteudo %}" class="caminho {% if conteudo == 'anual' %}anual{% endif %}">{{conteudo|upper}}</a>
+        <a href="{% url 'editar_'|add:tipo.singular client ano conteudo %}" class="caminho {% if conteudo == 'anual' %}anual{% endif %}">{{conteudo|upper}}</a>
         {% endfor %}
     </div>
     <footer>

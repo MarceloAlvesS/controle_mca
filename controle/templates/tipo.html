@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/geral.css' %}">
     <link rel="stylesheet" href="{% static 'css/terciario.css' %}">
-    <title>Controle MCA</title>
+    {% include 'title.html' %}
     </head>
     <body>
         <form method="post" id="formulario"> {% csrf_token %}
@@ -17,6 +17,22 @@
             {{tituloForm.nome}}
             <a href="{% url 'home' client %}" id="fechar"><img src="{% static 'image/fechar.png'%}" alt="voltar"></a>
         </header>
+
+        <div id="anos">
+            <ul>
+                {% for data in datas %}
+                    {% if data == ano %}
+                        <a href="{% url 'editar_'|add:tipo.singular client data tituloForm.nome.value %}">
+                            <li id="atual">{{data}}</li>
+                        </a>
+                    {%else %}
+                        <a href="{% url 'editar_'|add:tipo.singular client data tituloForm.nome.value %}">
+                            <li>{{data}}</li>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
 
         <div id="utilidade_geral">
             {% if tipo.plural == 'clientes' %}

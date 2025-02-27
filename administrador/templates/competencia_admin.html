@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/geral.css' %}">
     <link rel="stylesheet" href="{% static 'css/competencia.css' %}">
-    <title>Controle MCA</title>
+    {% include 'title.html' %}
 </head>
 <body>
         
@@ -18,6 +18,22 @@
             <a href="{% url 'home_admin' %}" id="fechar"><img src="{% static 'image/fechar.png'%}" alt="voltar"></a>
         </header>
         
+        <div id="anos">
+            <ul>
+                {% for data in datas %}
+                    {% if data == ano %}
+                        <a href="{% url tipo.singular data mes %}">
+                            <li id="atual">{{data}}</li>
+                        </a>
+                    {%else %}
+                        <a href="{% url tipo.singular data mes %}">
+                            <li>{{data}}</li>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+
         <table id="mensal">
             <thead class="obrigacoes">
                 <tr>

@@ -33,26 +33,34 @@ h1 {
 div#caminho {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    margin: auto;
-    margin-top: 5vh;
+    margin: 5vh 10px;
+    justify-items: center;
+    
+    a.caminho {
+        background-color: #8D9BA1;
+        margin: 5px;
+        text-decoration: none;
+        color: black;
+        font-weight: bold;
+        font-size: clamp(1em, 2.2em, 1em + 10vh);
+        border-radius: 5px;
+        width: 98%;
+        width: -moz-available;          /* WebKit-based browsers will ignore this. */
+        width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+        width: fill-available;
+        height: 20vh;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: center;
+        justify-content: center;
+        word-break: break-word;
+        border: 1px solid #8D9BA1;
+    }
+    a.caminho:hover {
+        border-color: black;
+    }
 }
 
-a.caminho {
-    background-color: #8D9BA1;
-    margin: 5px;
-    text-decoration: none;
-    color: black;
-    font-weight: bold;
-    font-size: clamp(1em, 2.2em, 1em + 10vh);
-    border-radius: 5px;
-    width: 22vw;
-    height: 20vh;
-    display: flex;
-    flex-wrap: wrap;
-    align-content: center;
-    justify-content: center;
-    word-break: break-word;
-}
 
 footer {
     flex-grow: 0;

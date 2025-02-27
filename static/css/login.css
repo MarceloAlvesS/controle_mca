@@ -53,6 +53,10 @@ a {
     color: black;
 }
 
+a:hover {
+    text-decoration: underline;
+}
+
 footer {
     background-color: rgb(49, 69, 78);
     border-radius: 0px 0px 10px 10px;
@@ -78,7 +82,7 @@ footer#logout:hover {
 }
 
 
-a.mudar {
+a.botao {
     background-color: #364b53;
     width: 15vw;
     height: 5vh;

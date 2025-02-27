@@ -5,52 +5,81 @@ body {
     flex-direction: column;
     text-align: center;
     font-family: Arial, Helvetica, sans-serif;
-}
 
-header {
-    flex-grow: 0;
-    display: flex;
-}
+    header {
+        flex-grow: 0;
+        display: flex;
 
-div#titulo {
-    flex-grow: 1;
-}
+        div#titulo {
+            flex-grow: 1;
 
-h1 {
-    margin: 0px;
-    margin-top: 20px;
-    font-size: clamp(2em, 7em, 1em + 30vh);
-    text-align: center;
-}
+            h1 {
+                margin: 0px;
+                margin-top: 20px;
+                font-size: clamp(2em, 7em, 1em + 30vh);
+                text-align: center;
+            }
+            h2 {
+                margin: 0px;
+                font-size: clamp(1.5em, 4.5em, 1em + 20vh);
+                position: relative;
+                top: 0px;
+                text-align: center;
+            }
+        }
+        #user {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #808080;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid black;
+            color: black;
+            text-decoration: none;
+        } 
+        #user:hover {
+            text-decoration: underline;
+            color: rgb(165, 0, 0);
+          }
+    }
+    div#caminhos {
+        display: flex;
+        justify-content: space-evenly;
+        flex-grow: 1;
+        align-items: center;
+        flex-wrap: wrap;
 
-h2 {
-    margin: 0px;
-    font-size: clamp(1.5em, 4.5em, 1em + 20vh);
-    position: relative;
-    top: 0px;
-    text-align: center;
-}
+        a.caminho {
+            background-color: #8D9BA1;
+            padding: 50px;
+            box-shadow: 10px 10px #8F8478;
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            font-size: clamp(1em, 2.5em, 1em + 10vh);
+        }
+        a.caminho:hover {
+            border: 1px solid white;
+            padding: 49px;
+        }
+    }
+    footer {
+        margin: 5px;
 
-a#user {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-}
-
-div#caminhos {
-    display: flex;
-    justify-content: space-evenly;
-    flex-grow: 1;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-a.caminho {
-    background-color: #8D9BA1;
-    padding: 50px;
-    box-shadow: 10px 10px #8F8478;
-    text-decoration: none;
-    color: black;
-    font-weight: bold;
-    font-size: clamp(1em, 2.5em, 1em + 10vh);
+        a {
+            display: block;
+            background-color: #8D9BA1;
+            padding: 5px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+        a:hover {
+            border: 1px solid black;
+            padding: 4px;
+        }
+    }
 }

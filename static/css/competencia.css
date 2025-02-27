@@ -45,3 +45,40 @@ td.inexistente {
 .coluna {
     display: contents;
 }
+
+div#anos {
+    ul {
+        padding: 0px;
+        margin: 0px;
+        list-style: none;
+        a {
+            text-decoration: none;
+            li {
+                color: black;
+                font-size: 1.05em;
+                padding: 5px;
+                background-color: #1B7381;
+                border-right: 1px solid black;
+                border-bottom: 1px solid black;
+            }
+            li:hover {
+                background-color: #fff;
+                text-decoration: underline;
+            }
+            li#atual {
+                background-color: #fff
+            }
+        }
+
+        width: fit-content;
+        display: flex;
+    }
+
+    background-color: #2397a8;
+    border: 1px solid black;
+    border-width: 1px 0px;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+}

@@ -22,14 +22,14 @@ urlpatterns = [
     
     path('', views.home, name='home'),
     path('clientes/', views.clientes),
-    path('clientes/', views.clientes),
     path('clientes/<int:pagina>/', views.clientes, name='clientes'),
     path('clientes/criar/', views.criar_cliente, name='criar_cliente'),
-    path('clientes/<str:cliente_nome>/', views.editar_cliente, name='editar_cliente'),
+    path('clientes/<int:ano>/<str:cliente_nome>/', views.editar_cliente, name='editar_cliente'),
     path('obrigacoes/', views.obrigacoes),
     path('obrigacoes/<int:pagina>/', views.obrigacoes, name='obrigacoes'),
     path('obrigacoes/criar/', views.criar_obrigacao, name='criar_obrigacao'),
-    path('obrigacoes/<str:obrigacao_nome>/', views.editar_obrigacao, name='editar_obrigacao'),
+    path('obrigacoes/<int:ano>/<str:obrigacao_nome>/', views.editar_obrigacao, name='editar_obrigacao'),
     path('competencias/', views.competencias, name='competencias'),
-    path('competencias/<str:mes>/', views.visualizar_competencia, name='editar_competencia'),
+    path('competencias/<int:ano>/<str:mes>/', views.visualizar_competencia, name='editar_competencia'),
+    path('duplicar/', views.duplicar_dados, name='duplicar')
 ]

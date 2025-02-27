@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  
+{% load static %}
+{% load permission_tags %}
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/geral.css' %}">
+    <link rel="stylesheet" href="{% static 'css/duplicar.css' %}">
+    {% include 'title.html' %}
+</head>
+<body>
+  <header>
+    {% if usuario|can:'ver_area_administrativa' %}
+      <a href="{% url 'home_admin' %}" id="voltar"><img src="{% static 'image/ir.png'%}" alt="voltar"></a>
+    {% else %}
+      <a href="{% url 'home' client %}" id="voltar"><img src="{% static 'image/ir.png'%}" alt="voltar"></a>
+    {% endif %}
+  </header>
+  <form action="." method="post"> {% csrf_token %}
+    <header>
+      <h1>Duplicar Dados</h1>
+    </header>
+    <div id="mensagem">
+      {{form.non_field_errors }}
+      <ul class="sucesslist">
+        {% for sucess in sucess_list %}
+          <li>{{ sucess }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div id="inputs">
+      <label for="">{{ form.de_ano.label }}:</label>
+      {{ form.de_ano }}
+      <label for="">{{ form.para_ano.label }}:</label>
+      {{ form.para_ano }}
+      <input id="submit" type="submit" value="Transferir Dados">
+    </div>
+  </form>
+</body>
+</html>

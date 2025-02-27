@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/geral.css' %}">
     <link rel="stylesheet" href="{% static 'css/terciario.css' %}">
-    <title>Controle MCA</title>
+    {% include 'title.html' %}
 </head>
 <body>
     <form method="post" id="formulario"> {% csrf_token %}
@@ -18,6 +18,22 @@
             {{tituloForm.nome}}
             <a href="{% url 'home_admin' %}" id="fechar"><img src="{% static 'image/fechar.png'%}" alt="voltar"></a>
         </header>
+
+        <div id="anos">
+            <ul>
+                {% for data in datas %}
+                    {% if data == ano %}
+                        <a href="{% url tipo.singular data tituloForm.nome.value %}">
+                            <li id="atual">{{data}}</li>
+                        </a>
+                    {%else %}
+                        <a href="{% url tipo.singular data tituloForm.nome.value %}">
+                            <li>{{data}}</li>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
 
         <div id="utilidade_geral">
             {% if tipo.plural == 'clientes_admin' %}
@@ -37,7 +53,7 @@
                 {% include 'tabela/utilidade.html' %}
 
                 <div class="linha thead">
-                    <div class="cabecalho tipo"></div>
+                    <div class="cabecalho tipo">{%if tipo.plural == 'clientes_admin'%}Obrigações{%elif tipo.plural == 'obrigacoes_admin'%}Clientes{%endif%}</div>
                     <div class="cabecalho">ANUAL</div>
                     <div class="cabecalho obs">OBS</div>
                 </div>
@@ -52,7 +68,7 @@
             <div id="mensal" class="tabela">
                 {% include 'tabela/utilidade.html' %}
                 <div class="linha thead">
-                    <div class="cabecalho tipo"></div>
+                    <div class="cabecalho tipo">{%if tipo.plural == 'clientes_admin'%}Obrigações{% elif tipo.plural == 'obrigacoes_admin'%}Clientes{%endif%}</div>
                     <div class="cabecalho">JAN</div>
                     <div class="cabecalho">FEV</div>
                     <div class="cabecalho">MAR</div>

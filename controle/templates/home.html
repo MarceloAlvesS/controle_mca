@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/geral.css' %}">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <title>Controle MCA</title>
+    {% include 'title.html' %}
 </head>
 <body>
     <header id="primario">
@@ -18,16 +18,17 @@
             <h2>{{client}}</h2>
         </div>
         {% if request.user|can:'ver_area_administrativa' %}
-        <a href="{% url 'home_admin' %}" id="administrador"><img src="{% static 'image/fechar.png' %}" alt=""></a>
-        {% else %}
-        <a id="user" href="{% url 'usuario' %}">{{request.user|title}}</a>
+            <a href="{% url 'home_admin' %}" id="administrador"><img src="{% static 'image/fechar.png' %}" alt=""></a>
         {% endif %}
+        <a id="user" href="{% url 'usuario' %}">{{request.user|title}}</a>
     </header>
     <div id="caminhos">
         <a class="caminho" href="{% url 'clientes' client 1 %}">CLIENTES</a>
         <a class="caminho" href="{% url 'obrigacoes' client 1 %}">OBRIGAÇÕES</a>
         <a class="caminho" href="{% url 'competencias' client %}">COMPETÊNCIAS</a>
     </div>
-
+    <footer>
+        <a href="{% url 'duplicar' client %}">DUPLICAR DADOS</a>
+    </footer>
 </body>
 </html>

@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from datetime import date
 
 class Empresa(models.Model):
     choice_enquadramento = [('', '____________'),
@@ -16,6 +16,7 @@ class Empresa(models.Model):
     usuarios = models.ManyToManyField(User,  related_name='empresas', through='Competencia')
     nome = models.CharField(max_length=17, blank=False,  null=False, unique=True)
     enquadramento = models.CharField(max_length=3, choices=choice_enquadramento, default='', blank=True)
+    ano_inscricao = models.CharField(max_length=4, default=date.today().year)
 
     def __str__(self):
         return self.nome
@@ -27,17 +28,20 @@ class Obrigacao(models.Model):
     empresas = models.ManyToManyField(Empresa, related_name='obrigacoes', through='Competencia')
     usuarios = models.ManyToManyField(User, related_name='obrigacoes', through='Competencia')
     formato = models.CharField(max_length=1, choices=[('M','Mensal'),('A','Anual')], default='M')
-
+    ano_inscricao = models.CharField(max_length=4, default=date.today().year)
     nome = models.CharField(max_length=17, blank=False,  null=False, unique=True)
 
     def __str__(self):
         return self.nome
     
+
 class Competencia(models.Model):
     meses = ['janeiro', 'fevereiro', 'marco', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro']
     usuario = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='competencias', null=True, blank=True)
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='competencias')
     obrigacao = models.ForeignKey(Obrigacao, on_delete=models.CASCADE, related_name='competencias')
+    
+    ano = models.CharField(max_length=4, default=f'{date.today().year}')
 
     janeiro = models.CharField(max_length=5, blank=True, null=True)
     fevereiro = models.CharField(max_length=5, blank=True, null=True)
@@ -55,5 +59,5 @@ class Competencia(models.Model):
     obs = models.TextField(blank=True)
 
     def __str__(self):
-        return f'{self.usuario} - {self.empresa}: {self.obrigacao}'
+        return f'{self.usuario} - {self.empresa}: {self.obrigacao} {self.ano}'
     

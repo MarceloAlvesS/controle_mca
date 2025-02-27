@@ -29,11 +29,12 @@ tr:nth-child(even) {
 
 tr {
   background-color: white;
-  height: 30px;
-}
-
-td, th{
   border: rgb(46, 46, 46) 1px solid;
+  height: 30px;
+  td {
+    border: rgb(46, 46, 46) 1px solid;
+    padding-left: 30px;
+  }
 }
 
 th {
@@ -43,9 +44,6 @@ th {
   background-color: #1c3f46;
 }
 
-td {
-  padding-left: 30px;
-}
 
 .checkbox_coluna {
   width: 1%;
